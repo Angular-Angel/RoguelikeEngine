@@ -38,7 +38,6 @@ public class Body extends CompositeItem implements Entity {
         weapon = null;
         
         refactor();
-        
     }
     
     /**

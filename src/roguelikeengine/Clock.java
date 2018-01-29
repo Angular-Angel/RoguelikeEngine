@@ -27,6 +27,10 @@ public class Clock {
         actors.remove(actor);
     }
     
+    public void clearActors() {
+        actors.clear();
+    }
+    
     public void play() {
         ArrayList<Actor> deadActors = new ArrayList<>();
         try {
