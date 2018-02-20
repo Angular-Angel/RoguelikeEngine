@@ -20,7 +20,7 @@ public class RoguelikeInterface extends JPanel {
     private Color backgroundColor;
     private Font displayFont;
     private JFrame window;
-    private ArrayList<Character> keys;
+    private ArrayList<KeyEvent> keys;
 
     /**
      * Creates a window of the default size and color.
@@ -57,7 +57,7 @@ public class RoguelikeInterface extends JPanel {
         this.displayYDist = yDist;
         backgroundColor = bgColor;
         displayFont = font;
-        keys = new ArrayList<Character>();
+        keys = new ArrayList<>();
         frame.setBackground(backgroundColor);
         display = new DisplayChar[xDist][yDist];
         setAll(new DisplayChar(' ', Color.WHITE));
@@ -70,7 +70,7 @@ public class RoguelikeInterface extends JPanel {
 
             @Override
             public void keyTyped(KeyEvent ke) {
-                keys.add(ke.getKeyChar());
+                keys.add(ke);
             }
 
             @Override
@@ -188,16 +188,20 @@ public class RoguelikeInterface extends JPanel {
      * Gets a key from the user.
      * @return 
      */
-    public synchronized char getKey() {
+    public synchronized KeyEvent getKey() {
         while (keys.isEmpty())
             try {
                 wait(10);
             } catch (InterruptedException ex) {
                 System.out.println(ex.getMessage());
             }
-        char c = keys.get(0);
+        KeyEvent key = keys.get(0);
         keys.remove(0);
-        return c;
+        return key;
+    }
+    
+    public synchronized char getKeyChar() {
+        return getKey().getKeyChar();
     }
     
     /**
@@ -324,7 +328,7 @@ public class RoguelikeInterface extends JPanel {
         Window win = new Window(this, s.length() + 2, 3);
         win.drawString(1, 1, s, Color.white);
         repaint();
-        return getKey();
+        return getKeyChar();
     }
     
     public String getSentence(String s) {
@@ -334,7 +338,7 @@ public class RoguelikeInterface extends JPanel {
         StringBuilder sb = new StringBuilder();
         char c;
         while (true) {
-            c = getKey();
+            c = getKeyChar();
             if (c == '\n')
                 return sb.toString();
             else {

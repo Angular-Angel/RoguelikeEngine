@@ -33,7 +33,7 @@ public class MenuWindow extends Window {
         boolean done = false;
         while (!done) {
             roguelikeInterface.repaint();
-            char c = roguelikeInterface.getKey();
+            char c = roguelikeInterface.getKeyChar();
             if (c == 'q') done = true;
             MenuOption option = options.get(c);
             if (option != null) {

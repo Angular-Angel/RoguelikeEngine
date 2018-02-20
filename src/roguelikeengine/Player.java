@@ -109,7 +109,7 @@ public class Player extends Controller {
      */
     public void handleInput() throws PlayerWantsToQuitException {
         //get the character the player entered.
-        char c = game.display.getKey();
+        char c = game.display.getKeyChar();
         //set the default direction, so we can easily tell whether or not it's 
         //been changed.
         Direction dir = null;
@@ -182,7 +182,7 @@ public class Player extends Controller {
                             items.get(i).getItem().getSymbol().getColor());
             }
             game.display.repaint();
-            char c = game.display.getKey();
+            char c = game.display.getKeyChar();
             int item = (int)c - 97;
             if (item >= 0 && item < pickup.length && item <= 26)
                 pickup[item] = !pickup[item];
@@ -232,7 +232,7 @@ public class Player extends Controller {
         win.drawString(3, 1, i.getName(), 
                         i.getSymbol().getColor());
         game.display.repaint();
-        char c = game.display.getKey();
+        char c = game.display.getKeyChar();
         switch (c) {
             case 'd':getBody().removeItem(i);
                 getBody().getLocation().getArea().addEntity(new ItemOnGround(getBody().getLocation(), i));
