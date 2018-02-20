@@ -345,17 +345,5 @@ public class RoguelikeInterface extends JPanel {
         }
         
     }
-    
-    public Window newWindow(int width, int height) {
-        return new Window(this, width, height);
-    }
-    
-    public Window newWindow(int x, int y, int width, int height) {
-        return newWindow(x, y, width, height, true);
-    }
-    
-    public Window newWindow(int x, int y, int width, int height, boolean border) {
-        return new Window(this, x, y, width, height, border);
-    }
         
 }

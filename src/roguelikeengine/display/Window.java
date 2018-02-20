@@ -12,7 +12,7 @@ import java.awt.Color;
  * @author angle
  */
 public class Window {
-    private RoguelikeInterface roguelikeInterface;
+    protected RoguelikeInterface roguelikeInterface;
     private int x, y, width, height;
 
     public Window(RoguelikeInterface roguelikeInterface, int width, int height) {

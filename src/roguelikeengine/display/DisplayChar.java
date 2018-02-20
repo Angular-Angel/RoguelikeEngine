@@ -13,8 +13,12 @@ public class DisplayChar {
     private Color color;
     private Color bgColor;
     
+    public DisplayChar(char symbol) {
+        this(symbol, Color.WHITE);
+    }
+    
     public DisplayChar(char symbol, Color color) {
-        this(symbol, color, Color.black);
+        this(symbol, color, Color.BLACK);
     }
     
     /**

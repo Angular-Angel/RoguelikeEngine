@@ -1,7 +1,7 @@
 package roguelikeengine;
 
 import roguelikeengine.display.Rotation;
-import roguelikeengine.display.RoguelikeInterface;
+import roguelikeengine.display.Window;
 import roguelikeengine.display.DisplayChar;
 import stat.NoSuchStatException;
 import roguelikeengine.controller.Controller;
@@ -18,6 +18,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import roguelikeengine.display.MenuOption;
+import roguelikeengine.display.MenuWindow;
 import roguelikeengine.largeobjects.*;
 
 /**
@@ -162,7 +164,7 @@ public class Player extends Controller {
         ArrayList<ItemOnGround> items = l.getArea().itemsAt(l.getX(), l.getY());
         boolean[] pickup = new boolean[items.size()];
         boolean done = false;
-        RoguelikeInterface.Window win = game.display.newWindow(20, 10);
+        Window win = new Window(game.display, 20, 10);
         while (!done) {
             for (int i = 0; i < items.size(); i++) {
                 win.setDisplay(new DisplayChar((char)(97 + i), 
@@ -199,7 +201,7 @@ public class Player extends Controller {
     }
     
     public void viewInventory() {
-        RoguelikeInterface.Window win = game.display.newWindow(40, 20);
+        Window win = new Window(game.display, 40, 20);
         ArrayList<Item> inventory = getBody().getInventory();
         for (int i = 0; i < inventory.size(); i++) {
             win.setDisplay(new DisplayChar((char)(97 + i), 
@@ -220,7 +222,7 @@ public class Player extends Controller {
     }
     
     public void viewItem(Item i) {
-        RoguelikeInterface.Window win = game.display.newWindow(20, 10);
+        Window win = new Window(game.display, 20, 10);
         win.setDisplay(i.getSymbol(), 1, 1);
         win.drawString(3, 1, i.getName(), 
                         i.getSymbol().getColor());
@@ -238,7 +240,7 @@ public class Player extends Controller {
     }
     
     public void viewStatus() {
-        RoguelikeInterface.Window win = game.display.newWindow(20, 8);
+        Window win = new Window(game.display, 20, 8);
     }
     
     /*public void saySpell() {
