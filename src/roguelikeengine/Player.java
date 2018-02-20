@@ -161,12 +161,6 @@ public class Player extends Controller {
     
     public void bodyInteraction(Body body) {
         MenuWindow win = new MenuWindow(game.display, 40, 20);
-        win.addMenuOption(new MenuOption('a', "Attack!") {
-            @Override
-            public void select() {
-                System.out.println("!");
-            }
-        });
         win.loop();
     }
     
@@ -212,20 +206,20 @@ public class Player extends Controller {
     }
     
     public void viewInventory() {
-        Window win = new Window(game.display, 40, 20);
+        MenuWindow menu = new MenuWindow(game.display, 40, 20);
+        
         ArrayList<Item> inventory = getBody().getInventory();
         for (int i = 0; i < inventory.size(); i++) {
-            win.setDisplay(new DisplayChar((char)(97 + i), 
-                           Color.white), 1, 1 + i);
-            win.drawString(3, 1 + i, inventory.get(i).getName(), 
-                        inventory.get(i).getSymbol().getColor());
+            Item item = inventory.get(i);
+            menu.addMenuOption(new MenuOption((char)(97 + i), item.getName()) {
+                @Override
+                public void select() {
+                    viewItem(item);
+                }
+            });
         }
-        game.display.repaint();
-        char c = game.display.getKey();
-        int item = (int)c - 97;
-        if (item >= 0 && item < inventory.size() && item <= 26)
-            viewItem(inventory.get(item));
         
+        menu.loop();
     }
     
     public void wield(Item i) {
