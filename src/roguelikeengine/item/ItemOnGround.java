@@ -17,7 +17,7 @@ public class ItemOnGround implements Entity{
     private Item item;
     
     
-    public ItemOnGround(Location l, Item i) {
+    public ItemOnGround(Item i, Location l) {
         setItem(i);
         setLocation(l);
     }

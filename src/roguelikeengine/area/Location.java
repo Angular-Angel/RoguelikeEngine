@@ -1,9 +1,7 @@
 package roguelikeengine.area;
 
-import java.util.ArrayList;
 import roguelikeengine.largeobjects.Body;
 import roguelikeengine.display.DisplayChar;
-import roguelikeengine.item.ItemOnGround;
 
 /**
  * Stores the data for a point on an Area.

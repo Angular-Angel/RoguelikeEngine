@@ -5,7 +5,6 @@
 package roguelikeengine.item;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,7 +15,6 @@ import roguelikeengine.display.RoguelikeInterface;
 import roguelikeengine.largeobjects.Attack;
 import roguelikeengine.largeobjects.Body;
 import stat.NoSuchStatException;
-import stat.Stat;
 import stat.StatContainer;
 
 /**
@@ -127,7 +125,7 @@ public class CompositeItem extends Item {
         if (location instanceof AreaLocation) {
             AreaLocation areaLocation = (AreaLocation) location;
             for (Item part : parts) {
-                areaLocation.getArea().addEntity(new ItemOnGround(areaLocation, part));
+                areaLocation.getArea().addEntity(new ItemOnGround(part, areaLocation));
             }
             areaLocation.getArea().removeItem(this);
         } else if (location instanceof ItemLocation) {

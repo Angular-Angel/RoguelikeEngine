@@ -229,7 +229,7 @@ public class Player extends Controller {
         char c = game.display.getKeyChar();
         switch (c) {
             case 'd':getBody().removeItem(i);
-                getBody().getLocation().getArea().addEntity(new ItemOnGround(getBody().getLocation(), i));
+                getBody().getLocation().getArea().addEntity(new ItemOnGround(i, getBody().getLocation()));
                 break;
             case 'w': wield(i);
                 break;

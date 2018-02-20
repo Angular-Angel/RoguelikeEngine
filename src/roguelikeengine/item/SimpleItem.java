@@ -34,8 +34,8 @@ public class SimpleItem extends Item {
         StringBuilder sb = new StringBuilder();
         for (ItemMod i : mods) {
             if (!sb.toString().contains(i.getAdjective()))sb.append(i.getAdjective() + " ");
-            sb.append(def.getName(0));
         }
+        sb.append(def.getName(0));
         return sb.toString();
     }
 

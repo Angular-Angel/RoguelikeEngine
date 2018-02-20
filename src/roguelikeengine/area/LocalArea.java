@@ -159,6 +159,14 @@ public class LocalArea {
         entities.remove(entity);
     }
     
+    public void addItem(Item i, int x, int y) {
+        addItem(i, new AreaLocation(this, x, y));
+    }
+    
+    public void addItem(Item i, Location l) {
+        addEntity(new ItemOnGround(i, l));
+    }
+    
     public void removeItem(Item i) {
         for (Entity e : entities) {
             if (e instanceof ItemOnGround && ((ItemOnGround) e).getItem() == i)
