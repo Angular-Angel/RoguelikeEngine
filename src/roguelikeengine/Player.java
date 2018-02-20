@@ -31,15 +31,11 @@ public class Player extends Controller {
     
     private final Game game;
     private Rotation rot;
-    private boolean xMirrored;
-    private boolean yMirrored;
     
     public Player(Body body, Game game) {
         super(body);
         
         rot = Rotation.degree0;
-        xMirrored = false;
-        yMirrored = false;
         this.game = game;
     }
     
@@ -70,8 +66,6 @@ public class Player extends Controller {
             //rotate and mirror according to the player, so as to not cause sudden 
             //reorientation when the player crosses a border.
             game.display.rotate(getRotation());
-            if (isxMirrored()) game.display.flipHorizontal();
-            if (isyMirrored()) game.display.flipVertical();
             game.display.repaint();
         } catch (NoSuchStatException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
@@ -257,45 +251,17 @@ public class Player extends Controller {
     }*/
 
     /**
-     * @return the rot
+     * @return the rotation
      */
     public Rotation getRotation() {
         return rot;
     }
 
     /**
-     * @param rot the rot to set
+     * @param rot the rotation to set
      */
     public void setRotation(Rotation rot) {
         this.rot = rot;
-    }
-
-    /**
-     * @return the xMirrored
-     */
-    public boolean isxMirrored() {
-        return xMirrored;
-    }
-
-    /**
-     * @param xMirrored the xMirrored to set
-     */
-    public void setxMirrored(boolean xMirrored) {
-        this.xMirrored = xMirrored;
-    }
-
-    /**
-     * @return the yMirrored
-     */
-    public boolean isyMirrored() {
-        return yMirrored;
-    }
-
-    /**
-     * @param yMirrored the yMirrored to set
-     */
-    public void setyMirrored(boolean yMirrored) {
-        this.yMirrored = yMirrored;
     }
     
     /**
@@ -305,30 +271,6 @@ public class Player extends Controller {
     public void addRotation(Rotation r) {
         setRotation(Rotation.add(getRotation(), r));
     
-    }
-    
-    /**
-     * change the x mirroring of the player view.
-     * @param b 
-     */
-    public void addxMirrored(boolean b) {
-        if (b) {
-            if (isxMirrored()) setxMirrored(false);
-            else setxMirrored(true);
-        }
-        
-    }
-    
-    /**
-     * change the y mirroring of the player view.
-     * @param b 
-     */
-    public void addyMirrored(boolean b) {
-        if (b) {
-            if (isyMirrored()) setyMirrored(false);
-            else setyMirrored(true);
-        }
-        
     }
      
     /**
