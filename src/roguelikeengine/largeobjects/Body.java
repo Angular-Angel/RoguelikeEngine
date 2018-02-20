@@ -177,6 +177,7 @@ public class Body extends CompositeItem implements Entity {
         effects.add(e);
     }
     
+    @Override
     public void beAttacked(Attack a) {
         //code for dodging goes here.
         //code for blocking goes here.
