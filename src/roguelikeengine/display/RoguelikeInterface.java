@@ -236,8 +236,6 @@ public class RoguelikeInterface extends JPanel {
     {
         switch (r)
         {
-            case degree0:
-            return;
             case degree90:
             {
                 DisplayChar[][] newImage = 
@@ -323,14 +321,14 @@ public class RoguelikeInterface extends JPanel {
     }
     
     public char prompt(String s) {
-        Window win = new Window(s.length() + 2, 3);
+        Window win = new Window(this, s.length() + 2, 3);
         win.drawString(1, 1, s, Color.white);
         repaint();
         return getKey();
     }
     
     public String getSentence(String s) {
-        Window win = new Window(getDisplayXDist(), 4);
+        Window win = new Window(this, getDisplayXDist(), 4);
         win.drawString(1, 1, s, Color.white);
         repaint();
         StringBuilder sb = new StringBuilder();
@@ -349,7 +347,7 @@ public class RoguelikeInterface extends JPanel {
     }
     
     public Window newWindow(int width, int height) {
-        return new Window(width, height);
+        return new Window(this, width, height);
     }
     
     public Window newWindow(int x, int y, int width, int height) {
@@ -357,112 +355,7 @@ public class RoguelikeInterface extends JPanel {
     }
     
     public Window newWindow(int x, int y, int width, int height, boolean border) {
-        return new Window(x, y, width, height, border);
-    }
-    
-    public class Window {
-        private int x, y, width, height;
-        
-        public Window(int width, int height) {
-            this((getDisplayXDist() - width)/2, (getDisplayYDist() - height)/2, width, height);
-        }
-        
-        public Window(int x, int y, int width, int height) {
-            this(x, y, width, height, true);
-        }
-        
-        public Window(int x, int y, int width, int height, boolean border) {
-            setX(x);
-            setY(y);
-            setWidth(width);
-            setHeight(height);
-            DisplayChar blank = new DisplayChar(' ', Color.black);
-            for (int i = 0; i < width; i++) {
-                for (int j = 0; j < height; j++) {
-                    setDisplay(blank, i, j);
-                }
-            }
-            DisplayChar horizontalBorder = new DisplayChar('─', Color.WHITE);
-            DisplayChar verticalBorder = new DisplayChar('│', Color.WHITE);
-            for (int i = 1; i < width; i++) {
-                setDisplay(horizontalBorder, i, 0);
-                setDisplay(horizontalBorder, i, height - 1);
-            }
-            for (int i = 1; i < height; i++) {
-                setDisplay(verticalBorder, 0, i);
-                setDisplay(verticalBorder, width - 1, i);
-            }
-            setDisplay(new DisplayChar('┌', Color.WHITE), 0, 0);
-            setDisplay(new DisplayChar('└', Color.WHITE), 0, height - 1);
-            setDisplay(new DisplayChar('┐', Color.WHITE), width - 1, 0);
-            setDisplay(new DisplayChar('┘', Color.WHITE), width - 1, height - 1);
-            repaint();
-        }
-
-        /**
-         * @return the x
-         */
-        public int getX() {
-            return x;
-        }
-
-        /**
-         * @param x the x to set
-         */
-        public void setX(int x) {
-            this.x = x;
-        }
-
-        /**
-         * @return the y
-         */
-        public int getY() {
-            return y;
-        }
-
-        /**
-         * @param y the y to set
-         */
-        public void setY(int y) {
-            this.y = y;
-        }
-
-        /**
-         * @return the width
-         */
-        public int getWidth() {
-            return width;
-        }
-
-        /**
-         * @param width the width to set
-         */
-        public void setWidth(int width) {
-            this.width = width;
-        }
-
-        /**
-         * @return the height
-         */
-        public int getHeight() {
-            return height;
-        }
-
-        /**
-         * @param height the height to set
-         */
-        public void setHeight(int height) {
-            this.height = height;
-        }
-        
-        public void setDisplay(DisplayChar d, int x, int y) {
-            display[getX() + x][getY() + y] = d;
-        }
-        
-        public void drawString(int x, int y, String string, Color c) {
-            writeString(x + getX(), y + getY(), string, c);
-        }
-        
+        return new Window(this, x, y, width, height, border);
     }
         
 }
