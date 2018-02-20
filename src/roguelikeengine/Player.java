@@ -150,13 +150,24 @@ public class Player extends Controller {
             l.move(dir.dx, dir.dy);
             //move the player, and adjust things if they cross a border.
             if (l.bodyAt() != null) {
-                //game.BodyAttack(getBody(), l.bodyAt());
+                bodyInteraction(l.bodyAt());
             } else if (getBody().moveTo(l) && l.getTerrain() == null) {
                 LocalArea.BorderArea b = l.getArea().getBorderArea(l.getX(), l.getY());
                 addRotation(l.getArea().getBorderArea(l.getX(), l.getY()).getRotation());
             }
         }
         
+    }
+    
+    public void bodyInteraction(Body body) {
+        MenuWindow win = new MenuWindow(game.display, 40, 20);
+        win.addMenuOption(new MenuOption('a', "Attack!") {
+            @Override
+            public void select() {
+                System.out.println("!");
+            }
+        });
+        win.loop();
     }
     
     public void pickUpItem() {
