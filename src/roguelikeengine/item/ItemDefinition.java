@@ -5,9 +5,7 @@
 package roguelikeengine.item;
 
 import java.util.ArrayList;
-import stat.Stat;
 import stat.StatContainer;
-import java.util.HashMap;
 import roguelikeengine.display.DisplayChar;
 import roguelikeengine.largeobjects.Attack;
 

@@ -8,7 +8,6 @@ import roguelikeengine.item.MaterialItem;
 import roguelikeengine.item.ItemDefinition;
 import roguelikeengine.item.Item;
 import roguelikeengine.item.ItemScript;
-import roguelikeengine.item.AttackScript;
 import roguelikeengine.item.MaterialDefinition;
 import roguelikeengine.item.CompositeItem;
 import java.awt.Color;
@@ -40,7 +39,6 @@ public class Registry extends RawReader {
     public HashMap<String, ItemDefinition> items;
     public HashMap<String, BodyDefinition> bodyTypes;
     public HashMap<String, TerrainDefinition> terrainTypes;
-    public AttackScript meleeAttackScript;
     
     public Registry() {
         items = new HashMap<>();
@@ -169,14 +167,14 @@ public class Registry extends RawReader {
                     
                     StatContainer stats = readJSONStats((JSONArray) m.get("stats"));
                     
-                    JSONArray bodyparts = (JSONArray) m.get("bodyparts");
+                    //JSONArray bodyparts = (JSONArray) m.get("bodyparts");
                     BodyDefinition bodydef;
                     BiologyScript script = (BiologyScript) readGroovyScript(new File((String) m.get("script")));
                     bodydef = new BodyDefinition(name, d, stats, script);
                      
-                    for (Object o : bodyparts) {
-                        bodydef.bodyTemplate.addPart(readJSONItem((JSONArray) o));
-                    }
+//                    for (Object o : bodyparts) {
+//                        bodydef.bodyTemplate.addPart(readJSONItem((JSONArray) o));
+//                    }
                     bodyTypes.put(name, bodydef);
                 }
  

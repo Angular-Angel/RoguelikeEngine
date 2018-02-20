@@ -5,10 +5,8 @@
 package roguelikeengine.area;
 
 import java.awt.*;
-import java.util.HashMap;
 import roguelikeengine.display.DisplayChar;
 import roguelikeengine.item.MaterialDefinition;
-import stat.Stat;
 import stat.StatContainer;
 
 /**

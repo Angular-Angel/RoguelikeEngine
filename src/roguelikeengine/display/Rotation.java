@@ -6,7 +6,15 @@ package roguelikeengine.display;
  */
 public enum Rotation{
     
-    degree0, degree90, degree180, degree270;
+    degree0(0), degree45(1), degree90(2), degree135(3), degree180(4),
+    degree225(5), degree270(6), degree315(7);
+    
+    public final int ordinal;
+    
+    
+    private Rotation(int ordinal) {
+        this.ordinal = ordinal;
+    }
     
     /**
      * Adds the two rotations.
@@ -15,14 +23,7 @@ public enum Rotation{
      * @return The sum of the rotations.
      */
     public static Rotation add(Rotation r1, Rotation r2) {
-        int i = (cast(r1) + cast(r2)) % 4;
-        switch (i) {
-            case 0: return degree0;
-            case 1: return degree90;
-            case 2: return degree180;
-            case 3: return degree270;
-        }
-        return degree0;
+        return values()[(r1.ordinal + r2.ordinal) % 8];
     }
     
     /**
@@ -32,37 +33,7 @@ public enum Rotation{
      * @return The result of the two rotations.
      */
     public static Rotation subtract(Rotation r1, Rotation r2) {
-        return cast(cast(r1) - cast(r2) % 4);
-    }
-    
-    /**
-     * Casts a rotation into an int.
-     * @param r The rotation.
-     * @return The int to which that rotation can be cast.
-     */
-    public static int cast(Rotation r){
-        switch(r) {
-            case degree0: return 0;
-            case degree90: return 1;
-            case degree180: return 2;
-            case degree270: return 3;
-        }
-        return 0;
-    }
-    
-    /**
-     * Casts an int into a rotation.
-     * @param r The int.
-     * @return The rotation to which that int can be cast.
-     */
-    public static Rotation cast(int r){
-        switch(r) {
-            case 0: return degree0;
-            case 1: return degree90;
-            case 2: return degree180;
-            case 3: return degree270;
-        }
-        return degree0;
+        return values()[(r1.ordinal - r2.ordinal) % 8];
     }
 }
 

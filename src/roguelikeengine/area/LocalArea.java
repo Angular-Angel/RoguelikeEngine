@@ -203,7 +203,7 @@ public class LocalArea {
      */
     
     public void addBorder(LocalArea area, int x, int y) {
-            addBorder(area, x, y, Rotation.degree0, false, false);
+            addBorder(area, x, y, Rotation.degree0);
     }
     
     /**
@@ -212,12 +212,10 @@ public class LocalArea {
      * @param x The x offset for the area
      * @param y The y offset for the area.
      * @param r The rotation of the bordering area.
-     * @param xm Whether or not the bordering area is mirrored on the x axis.
-     * @param ym Whether or not the bordering area is mirrored on the y axis.
      */
     
-    public void addBorder(LocalArea area, int x, int y, Rotation r, boolean xm, boolean  ym) {
-            borders.add(new BorderArea(area, x, y, r, xm, ym));
+    public void addBorder(LocalArea area, int x, int y, Rotation r) {
+            borders.add(new BorderArea(area, x, y, r));
     }
     
     /**
@@ -258,47 +256,23 @@ public class LocalArea {
             if (b.contains(x, y)) {
                 switch (b.getRotation()) {
                     case degree0:
-                        if (b.isXMirrored())
-                            getx = b.getArea().getWidth() - 1 - (x - b.getX());
-                        else
-                            getx = x - b.getX();
-                        if (b.isYMirrored())
-                            gety = b.getArea().getHeight() - 1 - (y - b.getY());
-                        else
-                            gety = y - b.getY();
+                        getx = x - b.getX();
+                        gety = y - b.getY();
                         area = b.getArea();
                         break;
                     case degree90:
-                        if (b.isXMirrored())
-                            getx = b.getArea().getHeight() - 1 - (y - b.getY());
-                        else
-                            getx = y - b.getY();
-                        if (b.isYMirrored())
-                            gety = x - b.getX();
-                        else
-                            gety = b.getArea().getWidth() - 1 - (x - b.getX());
+                        getx = y - b.getY();
+                        gety = b.getArea().getWidth() - 1 - (x - b.getX());
                         area = b.getArea();
                         break;
                     case degree180:
-                        if (b.isXMirrored())
-                            getx = x - b.getX();
-                        else
-                            getx = b.getArea().getWidth() - 1 - (x - b.getX());
-                        if (b.isYMirrored())
-                            gety = y - b.getY();
-                        else
-                            gety = b.getArea().getHeight() - 1 - (y - b.getY());
+                        getx = b.getArea().getWidth() - 1 - (x - b.getX());
+                        gety = b.getArea().getHeight() - 1 - (y - b.getY());
                         area = b.getArea();
                         break;
                     case degree270:
-                        if (b.isXMirrored())
-                            getx = y - b.getY();
-                        else
-                            getx = b.getArea().getHeight() - 1 - (y - b.getY());
-                        if (b.isYMirrored())
-                            gety = b.getArea().getWidth() - 1 - (x - b.getX());
-                        else
-                            gety = x - b.getX();
+                        getx = b.getArea().getHeight() - 1 - (y - b.getY());
+                        gety = x - b.getX();
                         
                         area = b.getArea();
                         break;
@@ -357,7 +331,7 @@ public class LocalArea {
          */
         
         public BorderArea(LocalArea area, int x, int y) {
-            this(area, x, y, Rotation.degree0, false, false);
+            this(area, x, y, Rotation.degree0);
         }
         
         /**
@@ -366,18 +340,13 @@ public class LocalArea {
          * @param x The x offset.
          * @param y The Y offset.
          * @param rotation The rotation of the area.
-         * @param yMirrored Whether the BorderArea is reversed across the x axis
-         * @param xMirrored Whether the BorderArea is reversed across the y axis
          */
         
-        public BorderArea(LocalArea area, int x, int y, Rotation rotation, 
-                          boolean yMirrored, boolean xMirrored) {
+        public BorderArea(LocalArea area, int x, int y, Rotation rotation) {
             this.area = area;
             this.x = x;
             this.y = y;
             setRotation(rotation);
-            setXMirrored(xMirrored);
-            setYMirrored(yMirrored);
             
         }
         
@@ -393,44 +362,20 @@ public class LocalArea {
             int getx = 0, gety = 0;
             switch (getRotation()) {
                 case degree0:
-                    if (isXMirrored())
-                        getx = getArea().getWidth() - 1 - (x - getX());
-                    else
-                        getx = x - getX();
-                    if (isYMirrored())
-                        gety = getArea().getHeight() - 1 - (y - getY());
-                    else
-                        gety = y - getY();
+                    getx = x - getX();
+                    gety = y - getY();
                     break;
                 case degree90:
-                    if (isXMirrored())
-                        getx = getArea().getHeight() - 1 - (y - getY());
-                    else
-                        getx = y - getY();
-                    if (isYMirrored())
-                        gety = x - getX();
-                    else
-                        gety = getArea().getWidth() - 1 - (x - getX());
+                    getx = y - getY();
+                    gety = getArea().getWidth() - 1 - (x - getX());
                     break;
                 case degree180:
-                    if (isXMirrored())
-                        getx = x - getX();
-                    else
-                        getx = getArea().getWidth() - 1 - (x - getX());
-                    if (isYMirrored())
-                        gety = y - getY();
-                    else
-                        gety = getArea().getHeight() - 1 - (y - getY());
+                    getx = getArea().getWidth() - 1 - (x - getX());
+                    gety = getArea().getHeight() - 1 - (y - getY());
                     break;
                 case degree270:
-                    if (isXMirrored())
-                        getx = y - getY();
-                    else
-                        getx = getArea().getHeight() - 1 - (y - getY());
-                    if (isYMirrored())
-                        gety = getArea().getWidth() - 1 - (x - getX());
-                    else
-                        gety = x - getX();
+                    getx = getArea().getHeight() - 1 - (y - getY());
+                    gety = x - getX();
                     break;
             }
             
@@ -491,34 +436,6 @@ public class LocalArea {
          */
         public void setRotation(Rotation rotation) {
             this.rotation = rotation;
-        }
-
-        /**
-         * @return the xMirrored
-         */
-        public boolean isXMirrored() {
-            return xMirrored;
-        }
-
-        /**
-         * @param xMirrored the xMirrored to set
-         */
-        public void setXMirrored(boolean xMirrored) {
-            this.xMirrored = xMirrored;
-        }
-
-        /**
-         * @return the yMirrored
-         */
-        public boolean isYMirrored() {
-            return yMirrored;
-        }
-
-        /**
-         * @param yMirrored the yMirrored to set
-         */
-        public void setYMirrored(boolean yMirrored) {
-            this.yMirrored = yMirrored;
         }
         
     }

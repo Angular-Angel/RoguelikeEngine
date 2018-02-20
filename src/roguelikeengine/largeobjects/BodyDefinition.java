@@ -1,10 +1,7 @@
 package roguelikeengine.largeobjects;
 
 import stat.StatContainer;
-import stat.Stat;
-import java.util.HashMap;
 import roguelikeengine.display.DisplayChar;
-import roguelikeengine.item.CompositeItem;
 
 /**
  *
@@ -13,7 +10,6 @@ import roguelikeengine.item.CompositeItem;
 public class BodyDefinition{
     private final String name;
     private final DisplayChar symbol;
-    public CompositeItem bodyTemplate;
     private final BiologyScript bioScript;
     public StatContainer stats;
     
@@ -22,7 +18,6 @@ public class BodyDefinition{
         this.stats.addAllStats(stats);
         this.name = name;
         this.symbol = d;
-        bodyTemplate = new CompositeItem(name, symbol);
         bioScript = script;
     }
     

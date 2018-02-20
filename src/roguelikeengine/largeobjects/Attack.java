@@ -5,8 +5,6 @@
 package roguelikeengine.largeobjects;
 
 import roguelikeengine.item.Item;
-import java.util.HashMap;
-import stat.Stat;
 import stat.StatContainer;
 
 /**

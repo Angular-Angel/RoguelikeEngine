@@ -100,13 +100,6 @@ public class LocationLine {
                             dx = temp;
                             break;
                     }
-                    if (b.isXMirrored()) {
-                        signX*= -1;
-                    }
-
-                    if (b.isYMirrored()) {
-                        signY*= -1;
-                    }
                 }
             }
 

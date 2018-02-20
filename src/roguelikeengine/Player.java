@@ -12,6 +12,7 @@ import roguelikeengine.area.Location;
 import roguelikeengine.area.LocationLine;
 import roguelikeengine.area.AreaLocation;
 import roguelikeengine.area.NonexistentLocationException;
+import roguelikeengine.area.Direction;
 import roguelikeengine.controller.PlayerWantsToQuitException;
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import roguelikeengine.largeobjects.*;
  */
 public class Player extends Controller {
     
-    private Game game;
+    private final Game game;
     private Rotation rot;
     private boolean xMirrored;
     private boolean yMirrored;
@@ -42,7 +43,6 @@ public class Player extends Controller {
     
     /**
      * writes what the character can see to display.
-     * @param display The interface to write to.
      */
     public void view() {
         try {
@@ -79,7 +79,6 @@ public class Player extends Controller {
     /**
      * This function goes through the line and write the symbol for each 
      * location to the display. Will stop if t comes to an page 
-     * @param display The display to write to.
      * @param line The line to go through.
      */
     public void visionLine(LocationLine line) {
@@ -104,24 +103,31 @@ public class Player extends Controller {
     
     /**
      * handles the input from the display.
-     * @param display The display responsible for interfacing with the player.
-     * @return Whether or not the player quit.
+     * @throws roguelikeengine.controller.PlayerWantsToQuitException
      */
     public void handleInput() throws PlayerWantsToQuitException {
         //get the character the player entered.
         char c = game.display.getKey();
         //set the default direction, so we can easily tell whether or not it's 
         //been changed.
-        int dir = -1;
+        Direction dir = null;
         //depending on what the key entered was, set dir accordingly.
         switch (c) {
-            case '4': dir = 3;
+            case '7': dir = Direction.NORTHWEST;
                 break;
-            case '6': dir = 1;
+            case '8': dir = Direction.NORTH;
                 break;
-            case '8': dir = 0;
+            case '9': dir = Direction.NORTHEAST;
                 break;
-            case '2': dir = 2;
+            case '6': dir = Direction.EAST;
+                break;
+            case '3': dir = Direction.SOUTHEAST;
+                break;
+            case '2': dir = Direction.SOUTH;
+                break;
+            case '1': dir = Direction.SOUTHWEST;
+                break;
+            case '4': dir = Direction.WEST;
                 break;
             case 'q': throw new PlayerWantsToQuitException();
             case 'g': pickUpItem();
@@ -134,34 +140,18 @@ public class Player extends Controller {
             default: break;
         }
         //adjust dir for mirroring and rotation.
-        if (dir != -1) {
-            if (isxMirrored()) {
-                if (dir == 1) dir = 3;
-                else if (dir == 3) dir = 1;
-            }
-            if (isyMirrored()) {
-                if (dir == 0) dir = 2;
-                else if (dir == 2) dir = 0;
-            }
-            dir -= Rotation.cast(getRotation());
-            while (dir <0) dir += 4;
-            dir %= 4;
+        if (dir != null) {
+            
+            dir = dir.rotate(getRotation());
             //find the location to move the player to.
             AreaLocation l = new AreaLocation(getBody().getLocation());
-            switch (dir) {
-                case 0: l.move(0, -1); break;
-                case 1: l.move(1, 0); break;
-                case 2: l.move(0, 1); break;
-                case 3: l.move(-1, 0); break;
-            }
+            l.move(dir.dx, dir.dy);
             //move the player, and adjust things if they cross a border.
             if (l.bodyAt() != null) {
                 //game.BodyAttack(getBody(), l.bodyAt());
             } else if (getBody().moveTo(l) && l.getTerrain() == null) {
                 LocalArea.BorderArea b = l.getArea().getBorderArea(l.getX(), l.getY());
                 addRotation(l.getArea().getBorderArea(l.getX(), l.getY()).getRotation());
-                addxMirrored(l.getArea().getBorderArea(l.getX(), l.getY()).isXMirrored());
-                addyMirrored(l.getArea().getBorderArea(l.getX(), l.getY()).isYMirrored());
             }
         }
         
