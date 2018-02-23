@@ -126,7 +126,7 @@ public class Player extends Controller {
             case '4': dir = Direction.WEST;
                 break;
             case 'q': throw new PlayerWantsToQuitException();
-            case 'g': pickUpItem();
+            case 'g': pickUpItems();
                 break;
             case 'i': viewInventory();
                 break;
@@ -158,12 +158,12 @@ public class Player extends Controller {
         win.loop();
     }
     
-    public void pickUpItem() {
+    public void pickUpItems() {
         Location l = getBody().getLocation();
         ArrayList<ItemOnGround> items = l.getArea().itemsAt(l.getX(), l.getY());
         boolean[] pickup = new boolean[items.size()];
         boolean done = false;
-        Window win = new Window(game.display, 20, 10);
+        Window win = new Window(game.display, "Items", 20, 10);
         while (!done) {
             for (int i = 0; i < items.size(); i++) {
                 win.setDisplay(new DisplayChar((char)(97 + i), 
@@ -200,7 +200,7 @@ public class Player extends Controller {
     }
     
     public void viewInventory() {
-        MenuWindow menu = new MenuWindow(game.display, 40, 20);
+        MenuWindow menu = new MenuWindow(game.display, "Inventory", 40, 20);
         
         ArrayList<Item> inventory = getBody().getInventory();
         for (int i = 0; i < inventory.size(); i++) {
@@ -209,6 +209,7 @@ public class Player extends Controller {
                 @Override
                 public void select() {
                     viewItem(item);
+                    menu.end();
                 }
             });
         }
@@ -221,21 +222,24 @@ public class Player extends Controller {
     }
     
     public void viewItem(Item i) {
-        Window win = new Window(game.display, 20, 10);
-        win.setDisplay(i.getSymbol(), 1, 1);
-        win.drawString(3, 1, i.getName(), 
-                        i.getSymbol().getColor());
-        game.display.repaint();
-        char c = game.display.getKeyChar();
-        switch (c) {
-            case 'd':getBody().removeItem(i);
-                getBody().getLocation().getArea().addEntity(new ItemOnGround(i, getBody().getLocation()));
-                break;
-            case 'w': wield(i);
-                break;
-            case 'u':i.use(game.display, getBody());
-                break;
-        }
+        MenuWindow menu = new MenuWindow(game.display, i.getName(), 20, 10);
+        Body body = getBody();
+        menu.addMenuOption(new MenuOption('d', "Drop") {
+            @Override
+            public void select() {
+                body.removeItem(i);
+                body.getLocation().getArea().addEntity(new ItemOnGround(i, new AreaLocation(body.getLocation())));
+                menu.end();
+            }
+        });
+        menu.addMenuOption(new MenuOption('w', "Wield") {
+            @Override
+            public void select() {
+                wield(i);
+                menu.end();
+            }
+        });
+        menu.loop();
     }
     
     public void viewStatus() {

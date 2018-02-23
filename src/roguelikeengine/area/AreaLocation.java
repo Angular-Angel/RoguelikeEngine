@@ -13,12 +13,6 @@ import roguelikeengine.item.ItemOnGround;
 public class AreaLocation extends Location {
     private int x, y;
     private LocalArea area;
-
-    /**
-     * Default constructor made private.
-     */
-    
-    private AreaLocation() {}
     
     /**
      * Constructor for a location at 0,0 on area.
