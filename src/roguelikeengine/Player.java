@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import roguelikeengine.display.MenuOption;
 import roguelikeengine.display.MenuWindow;
+import roguelikeengine.display.ToggleWindow;
 import roguelikeengine.largeobjects.*;
 
 /**
@@ -161,42 +162,20 @@ public class Player extends Controller {
     public void pickUpItems() {
         Location l = getBody().getLocation();
         ArrayList<ItemOnGround> items = l.getArea().itemsAt(l.getX(), l.getY());
-        boolean[] pickup = new boolean[items.size()];
-        boolean done = false;
-        Window win = new Window(game.display, "Items", 20, 10);
-        while (!done) {
-            for (int i = 0; i < items.size(); i++) {
-                win.setDisplay(new DisplayChar((char)(97 + i), 
-                               Color.white), 1, 1 + i);
-                if (pickup[i])
-                    win.setDisplay(new DisplayChar('+', Color.white), 3, 1 + i);
-                else
-                    win.setDisplay(new DisplayChar('-', Color.white), 3, 1 + i);
-                win.drawString(5, 1 + i, items.get(i).getItem().getName(), 
-                            items.get(i).getItem().getSymbol().getColor());
-            }
-            game.display.repaint();
-            char c = game.display.getKeyChar();
-            int item = (int)c - 97;
-            if (item >= 0 && item < pickup.length && item <= 26)
-                pickup[item] = !pickup[item];
-            else {
-                switch (c) {
-                    case (char)27:
-                    case '\n':
-                    case ' ':
-                        done = true;
-                        break;
+        ToggleWindow menu = new ToggleWindow(game.display, "Items", 20, 10);
+        for (int i = 0; i < items.size(); i++) {
+            ItemOnGround itemOnGround = items.get(i);
+            Item item = itemOnGround.getItem();
+            menu.addMenuOption(new MenuOption((char)(97 + i), item.getName()) {
+                @Override
+                public void select() {
+                    getBody().addItem(item);
+                    l.getArea().removeEntity(itemOnGround);
                 }
-            }
+            });
         }
-        for (int i = 0; i < pickup.length; i++){
-                if (pickup[i]) {
-                    getBody().addItem(items.get(i).getItem());
-                    l.getArea().removeEntity(items.get(i));
-                }
-            }
         
+        menu.loop();
     }
     
     public void viewInventory() {
@@ -209,7 +188,8 @@ public class Player extends Controller {
                 @Override
                 public void select() {
                     viewItem(item);
-                    menu.end();
+                    if (!inventory.contains(item))
+                        menu.removeMenuOption(this);
                 }
             });
         }

@@ -12,42 +12,45 @@ import java.util.HashMap;
  *
  * @author angle
  */
-public class MenuWindow extends Window {
+public class ToggleWindow extends MenuWindow {
     
-    protected HashMap<Character, MenuOption> options;
-    protected boolean done;
+    private HashMap<Character, Boolean> selected;
     
-    public MenuWindow(RoguelikeInterface roguelikeInterface, int width, int height) {
-        super(roguelikeInterface, width, height);
-        options = new HashMap <>();
-    }
-    
-    public MenuWindow(RoguelikeInterface roguelikeInterface, String title,  int width, int height) {
+    public ToggleWindow(RoguelikeInterface roguelikeInterface, String title, int width, int height) {
         super(roguelikeInterface, title, width, height);
-        options = new HashMap <>();
+        selected = new HashMap<>();
     }
     
+    @Override
     public void addMenuOption(MenuOption menuOption) {
-        options.put(menuOption.key, menuOption);
+        super.addMenuOption(menuOption);
         int y = options.size();
-        setDisplay(new DisplayChar(menuOption.key, Color.white), 1, 1 + y);
-        drawString(3, 1 + y, menuOption.option, Color.white);
+        selected.put(menuOption.key, false);
+        setDisplay(new DisplayChar('-', Color.white), 3, 1 + y);
+        drawString(5, 1 + y, menuOption.option, Color.white);
     }
     
+    @Override
     public void removeMenuOption(MenuOption menuOption) {
-        options.remove(menuOption.key);
-        drawOptions();
+        selected.remove(menuOption.key);
+        super.removeMenuOption(menuOption);
     }
     
+    @Override
     public void drawOptions() {
         int i = 0;
         for (MenuOption option : options.values()) {
             i++;
             setDisplay(new DisplayChar(option.key, Color.white), 1, 1 + i);
-            drawString(3, 1 + i, option.option, Color.white);
+            if (selected.get(option.key))
+                setDisplay(new DisplayChar('+', Color.white), 3, 1 + i);
+            else
+                setDisplay(new DisplayChar('-', Color.white), 3, 1 + i);
+            drawString(5, 1 + i, option.option, Color.white);
         }
     }
     
+    @Override
     public void loop() {
         done = false;
         while (!done) {
@@ -56,13 +59,11 @@ public class MenuWindow extends Window {
             char c = roguelikeInterface.getKeyChar();
             MenuOption option = options.get(c);
             if (option != null) {
-                option.select();
+                selected.replace(c, !selected.get(c));
             } else done = true;
         }
+        for (MenuOption option : options.values()) {
+            if (selected.get(option.key)) option.select();
+        }
     }
-    
-    public void end() {
-        done = true;
-    }
-    
 }
