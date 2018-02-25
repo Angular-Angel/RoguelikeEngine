@@ -33,12 +33,12 @@ public class SimpleItem extends Item {
 
     @Override
     public String getName() {
-        StringBuilder sb = new StringBuilder();
+        String name = "";
         for (ItemMod i : mods) {
-            if (!sb.toString().contains(i.getAdjective()))sb.append(i.getAdjective() + " ");
+            if (!name.contains(i.getAdjective())) name += (i.getAdjective() + " ");
         }
-        sb.append(def.getName(0));
-        return sb.toString();
+        name += def.getName(0);
+        return name;
     }
 
     @Override
