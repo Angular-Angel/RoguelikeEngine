@@ -50,8 +50,9 @@ public class SimpleItem extends Item {
     }
 
     @Override
-    public String takeAttack(Attack A) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean takeAttack(Attack a) {
+        def.defaultMaterial().getDamageScript().run(a, this);
+        return (stats.getScore("HP") <= 0);
     }
 
     @Override

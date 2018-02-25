@@ -5,7 +5,6 @@
 package roguelikeengine.item;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import roguelikeengine.area.AreaLocation;
@@ -16,6 +15,7 @@ import roguelikeengine.largeobjects.Attack;
 import roguelikeengine.largeobjects.Body;
 import stat.NoSuchStatException;
 import stat.StatContainer;
+import static roguelikeengine.Game.game;
 
 /**
  *
@@ -64,9 +64,8 @@ public class CompositeItem extends Item {
     }
     
     public Item getRandomPart() throws NoSuchStatException {
-        Random random = new Random();
         float size = stats.getScore("Size");
-        int target = random.nextInt((int) size);
+        int target = game.random.nextInt((int) size);
         for (Item part : getParts()) {
             if (target < part.stats.getScore("Size"))
                 return part;
@@ -92,31 +91,22 @@ public class CompositeItem extends Item {
     }
 
     @Override
-    public String takeAttack(Attack a) {
+    public boolean takeAttack(Attack a) {
         int hitLoc = 0;
-        try {
-            hitLoc = (int) (Math.random() * stats.getScore("Size"));
-        } catch (NoSuchStatException ex) {
-            Logger.getLogger(CompositeItem.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        hitLoc = (int) (Math.random() * stats.getScore("Size"));
         Item i = null;
         
         for (Item e : parts) {
-            try {
-                if (hitLoc > e.stats.getScore("Size")) {hitLoc -= e.stats.getScore("Size");}
-                else {i = e; break;}
-            } catch (NoSuchStatException ex) {
-                Logger.getLogger(Body.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            if (hitLoc > e.stats.getScore("Size")) {hitLoc -= e.stats.getScore("Size");}
+            else {i = e; break;}
+            
         }
         if (i != null) {
-            String result = i.takeAttack(a);
-            if (result.contains("Deleted")) {
+            if (i.takeAttack(a)) {
                 removePart(i);
             }
-            return result;
         }
-        else return "Nothig interesting happened.";
+        return (stats.getScore("HP") <= 0);
     }
 
     @Override

@@ -60,8 +60,7 @@ public class ItemOnGround implements Entity{
 
     @Override
     public void beAttacked(Attack a) {
-        String result = a.attack(item);
-        if (result.contains("shatter")) {
+        if (a.attack(item)) {
             location.getArea().removeEntity(this);
         }
     }

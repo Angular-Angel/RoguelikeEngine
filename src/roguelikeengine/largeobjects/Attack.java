@@ -26,5 +26,5 @@ public abstract class Attack {
         this(attack.name, attack.stats.viewStats());
     }
     
-    public abstract String attack(Item i);
+    public abstract boolean attack(Item i);
 }

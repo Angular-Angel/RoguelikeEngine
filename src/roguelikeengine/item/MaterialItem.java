@@ -63,14 +63,9 @@ public class MaterialItem extends Item {
     }
 
     @Override
-    public String takeAttack(Attack a){
-        String result = "";
-        try {
-            material.getDamageScript().run(a, this);
-        } catch (NoSuchStatException ex) {
-            Logger.getLogger(MaterialItem.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return result;
+    public boolean takeAttack(Attack a){
+        material.getDamageScript().run(a, this);
+        return (stats.getScore("HP") <= 0);
     }
 
     @Override

@@ -62,7 +62,7 @@ public abstract class Item {
     
     public abstract void use(RoguelikeInterface display, Body b);
     
-    public abstract String takeAttack(Attack A);
+    public abstract boolean takeAttack(Attack A);
     
     public void refactor() {
         stats.refactor();

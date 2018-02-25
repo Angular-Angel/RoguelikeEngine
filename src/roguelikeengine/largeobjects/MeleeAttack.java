@@ -4,9 +4,7 @@
  */
 package roguelikeengine.largeobjects;
 
-import java.util.HashMap;
 import roguelikeengine.item.Item;
-import stat.Stat;
 import stat.StatContainer;
 
 
@@ -29,7 +27,7 @@ public class MeleeAttack extends Attack {
     }
 
     @Override
-    public String attack(Item i){
+    public boolean attack(Item i){
         return i.takeAttack(this);
         
     }
