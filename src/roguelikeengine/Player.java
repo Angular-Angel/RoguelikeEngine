@@ -155,8 +155,34 @@ public class Player extends Controller {
     }
     
     public void bodyInteraction(Body body) {
-        MenuWindow win = new MenuWindow(game.display, 40, 20);
-        win.loop();
+        MenuWindow menu = new MenuWindow(game.display, 40, 20);
+        menu.addMenuOption(new MenuOption('a', "Attack") {
+            @Override
+            public void select() {
+                attackMenu(body);
+                menu.end();
+            }
+        });
+        menu.loop();
+    }
+    
+    public void attackMenu(Body body) {
+        MenuWindow menu = new MenuWindow(game.display, "Attack!", 40, 20);
+        ArrayList<Attack> attacks = getBody().getAttacks();
+        
+        for (int i = 0; i < attacks.size(); i++) {
+            Attack attack = attacks.get(i);
+            menu.addMenuOption(new MenuOption((char)(97 + i), attack.name) {
+                @Override
+                public void select() {
+                    getBody().attack(body, attack);
+                    menu.end();
+                }
+            });
+        }
+        
+        menu.loop();
+        
     }
     
     public void pickUpItems() {

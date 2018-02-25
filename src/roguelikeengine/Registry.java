@@ -26,6 +26,7 @@ import roguelikeengine.display.DisplayChar;
 import roguelikeengine.item.DamageScript;
 import roguelikeengine.largeobjects.BiologyScript;
 import roguelikeengine.largeobjects.BodyDefinition;
+import roguelikeengine.largeobjects.MeleeAttack;
 import stat.StatContainer;
 import util.RawReader;
 
@@ -111,10 +112,9 @@ public class Registry extends RawReader {
                     JSONArray attacks = (JSONArray) m.get("attacks");
                     for (Object o : attacks) {
                         JSONArray attack = (JSONArray) o;
-                        //String attackName = (String) attack.get(0);
-                        
-                        //StatContainer  attackStats = readJSONStats((JSONArray) attack.get(1));
-                        //itemdef.addAttack(new Melee(attackName, attackStats));
+                        String attackName = (String) attack.get(0);
+                        StatContainer  attackStats = readJSONStats((JSONArray) attack.get(1));
+                        itemdef.addAttack(new MeleeAttack(attackName, attackStats));
                     }
                     
                     items.put(names[0], itemdef);

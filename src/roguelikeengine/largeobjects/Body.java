@@ -173,8 +173,12 @@ public class Body extends CompositeItem implements Entity {
     }
     
     
-    public void addStatusEffect(StatusEffect e) {
-        effects.add(e);
+    public void addStatusEffect(StatusEffect effect) {
+        effects.add(effect);
+    }
+    
+    public void attack(Body body, Attack attack) {
+        body.beAttacked(attack);
     }
     
     @Override
@@ -224,6 +228,16 @@ public class Body extends CompositeItem implements Entity {
      */
     public void setWeapon(Item weapon) {
         this.weapon = weapon;
+    }
+    
+    @Override
+    public ArrayList<Attack> getAttacks() {
+        ArrayList<Attack> attacks = super.getAttacks();
+        if (weapon != null) {
+            attacks.addAll(weapon.getAttacks());
+            System.out.println("??");
+        }
+        return attacks;
     }
     
     

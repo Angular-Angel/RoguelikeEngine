@@ -13,17 +13,13 @@ import stat.StatContainer;
  * @author Greg
  */
 public class MeleeAttack extends Attack {
-    private Item weapon;
-    private Body body;
 
-    public MeleeAttack(String name, Item weapon, Body body) {
-        this(name, weapon, body, new StatContainer());
+    public MeleeAttack(String name) {
+        this(name, new StatContainer());
     }
     
-    public MeleeAttack(String name, Item weapon, Body body, StatContainer stats) {
+    public MeleeAttack(String name, StatContainer stats) {
         super(name, stats);
-        this.body = body;
-        this.weapon = weapon;
     }
 
     @Override

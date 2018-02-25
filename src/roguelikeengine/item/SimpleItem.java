@@ -20,8 +20,10 @@ public class SimpleItem extends Item {
 
     ItemDefinition def;
 
-    private SimpleItem(ItemDefinition def) {
+    public SimpleItem(ItemDefinition def) {
+        super(def.stats);
         this.def = def;
+        addAttacks(def.getAttacks());
     }
     
     @Override
