@@ -53,7 +53,7 @@ public class SimpleItem extends Item {
 
     @Override
     public boolean takeAttack(Attack a) {
-        def.defaultMaterial().getDamageScript().run(a, this);
+        stats.getStat("HP").modify("Damage", -a.stats.getScore("Damage"));
         return (stats.getScore("HP") <= 0);
     }
 

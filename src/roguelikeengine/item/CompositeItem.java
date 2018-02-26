@@ -92,20 +92,7 @@ public class CompositeItem extends Item {
 
     @Override
     public boolean takeAttack(Attack a) {
-        int hitLoc = 0;
-        hitLoc = (int) (Math.random() * stats.getScore("Size"));
-        Item i = null;
-        
-        for (Item e : parts) {
-            if (hitLoc > e.stats.getScore("Size")) {hitLoc -= e.stats.getScore("Size");}
-            else {i = e; break;}
-            
-        }
-        if (i != null) {
-            if (i.takeAttack(a)) {
-                removePart(i);
-            }
-        }
+        stats.getStat("HP").modify("Damage", -a.stats.getScore("Damage"));
         return (stats.getScore("HP") <= 0);
     }
 

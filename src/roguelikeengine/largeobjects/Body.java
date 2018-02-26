@@ -235,7 +235,6 @@ public class Body extends CompositeItem implements Entity {
         ArrayList<Attack> attacks = super.getAttacks();
         if (weapon != null) {
             attacks.addAll(weapon.getAttacks());
-            System.out.println("??");
         }
         return attacks;
     }
