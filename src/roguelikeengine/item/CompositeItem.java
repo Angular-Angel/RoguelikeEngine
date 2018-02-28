@@ -92,7 +92,7 @@ public class CompositeItem extends Item {
 
     @Override
     public boolean takeAttack(Attack a) {
-        stats.getStat("HP").modify("Damage", -a.stats.getScore("Damage"));
+        stats.getStat("HP").modifyBase(-a.stats.getScore("Damage"));
         return (stats.getScore("HP") <= 0);
     }
 

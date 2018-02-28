@@ -8,6 +8,7 @@ import roguelikeengine.item.CompositeItem;
 import roguelikeengine.area.Location;
 import roguelikeengine.area.AreaLocation;
 import java.util.*;
+import stat.NumericStat;
 
 /**
  *
@@ -36,6 +37,8 @@ public class Body extends CompositeItem implements Entity {
         effects = new ArrayList<>();
         moves = 0;
         weapon = null;
+        
+        stats.addStat("HP", new NumericStat(stats.getScore("Max HP")));
         
         refactor();
     }
@@ -185,30 +188,11 @@ public class Body extends CompositeItem implements Entity {
     public void beAttacked(Attack a) {
         //code for dodging goes here.
         //code for blocking goes here.
-        //Determine hit location.
+        //code for determining hit location goes here.
                 
-        def.getBioScript().beAttacked(this, a);
         
-//        int hitLoc = (int) (Math.random() );
-//        Item i = null;
-//        
-//        for (Item e : parts) {
-//            try {
-//                if (hitLoc > e.getScore("Size")) {hitLoc -= e.getScore("Size");}
-//                else {i = e; break;}
-//            } catch (NoSuchStatException ex) {
-//                Logger.getLogger(Body.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//        if (i != null) {
-//            String result = a.attack(i);
-//            if (result.contains("destroy")) {
-//                removeItem(i);
-//                removePart(i);
-//            }
-//            System.out.println(result);
-//        }
-        //Code for taking damage.
+        //take damage
+        def.getBioScript().beAttacked(this, a);
         
     }
 
@@ -216,6 +200,7 @@ public class Body extends CompositeItem implements Entity {
     public String getName() {
         return name;
     }
+    
     /**
      * @return the weapon
      */
