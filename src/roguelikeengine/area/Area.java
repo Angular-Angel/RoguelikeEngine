@@ -12,6 +12,13 @@ import java.util.ArrayList;
  * @author Greg
  */
 public class Area {
+    public final ArrayList<LocalArea> localAreas;
     
+    public Area() {
+        localAreas = new ArrayList<>();    
+    }
     
+    public void add(LocalArea localArea) {
+        localAreas.add(localArea);
+    }
 }
