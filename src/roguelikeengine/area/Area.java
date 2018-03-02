@@ -6,6 +6,7 @@
 package roguelikeengine.area;
 
 import java.util.ArrayList;
+import roguelikeengine.controller.Controller;
 
 /**
  *
@@ -13,12 +14,20 @@ import java.util.ArrayList;
  */
 public class Area {
     public final ArrayList<LocalArea> localAreas;
+    public final ArrayList<Controller> controllers;
+    
+    public LocalArea start;
     
     public Area() {
         localAreas = new ArrayList<>();    
+        controllers = new ArrayList<>();
     }
     
     public void add(LocalArea localArea) {
         localAreas.add(localArea);
+    }
+    
+    public void add(Controller controller) {
+        controllers.add(controller);
     }
 }
