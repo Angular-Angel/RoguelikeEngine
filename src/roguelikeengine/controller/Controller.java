@@ -8,7 +8,7 @@ import roguelikeengine.largeobjects.Body;
  *
  * @author greg
  */
-public abstract class Controller implements Actor{
+public abstract class Controller implements Actor {
     private Body body;
     private Game game;
     

@@ -189,7 +189,6 @@ public class Body extends CompositeItem implements Entity {
         //code for dodging goes here.
         //code for blocking goes here.
         //code for determining hit location goes here.
-                
         
         //take damage
         def.getBioScript().beAttacked(this, a);
