@@ -6,17 +6,17 @@ package roguelikeengine;
 
 import roguelikeengine.largeobjects.Actor;
 import roguelikeengine.controller.PlayerWantsToQuitException;
-import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  *
  * @author greg
  */
 public class Clock {
-    private ArrayList<Actor> actors;
+    private final HashSet<Actor> actors;
     
     public Clock() {
-        actors = new ArrayList<Actor>();
+        actors = new HashSet<Actor>();
     }
     
     public void addActor(Actor actor) {
@@ -32,7 +32,7 @@ public class Clock {
     }
     
     public void play() {
-        ArrayList<Actor> deadActors = new ArrayList<>();
+        HashSet<Actor> deadActors = new HashSet<>();
         try {
             while (actors.size() > 0) {
                 for (Actor a : actors) {
