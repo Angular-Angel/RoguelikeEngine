@@ -17,5 +17,7 @@ public interface BiologyScript {
     public void step(Creature b);
     
     public void beAttacked(Creature b, Attack a);
+    
+    public void die();
 
 }

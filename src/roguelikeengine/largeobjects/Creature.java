@@ -1,5 +1,6 @@
 package roguelikeengine.largeobjects;
 
+import java.awt.Color;
 import stat.NoSuchStatException;
 import roguelikeengine.controller.DijkstraMap;
 import roguelikeengine.controller.Controller;
@@ -8,6 +9,8 @@ import roguelikeengine.item.CompositeItem;
 import roguelikeengine.area.Location;
 import roguelikeengine.area.AreaLocation;
 import java.util.*;
+import roguelikeengine.display.DisplayChar;
+import roguelikeengine.item.ItemOnGround;
 import stat.NumericStat;
 
 /**
@@ -23,7 +26,7 @@ public class Creature implements Entity {
     private int moves;
     private ArrayList<StatusEffect> effects;
     private Item weapon;
-    private Item body;
+    private CompositeItem body;
     
     public Creature(AreaLocation location, BodyDefinition bodyDef) {
         this("", location, bodyDef);
@@ -190,6 +193,7 @@ public class Creature implements Entity {
         //take damage
         def.getBioScript().beAttacked(this, a);
         
+        if (!isAlive()) die();
     }
 
     public String getName() {
@@ -223,6 +227,16 @@ public class Creature implements Entity {
      */
     public Item getBody() {
         return body;
+    }
+
+    private void die() {
+        DisplayChar symbol = body.getSymbol();
+        symbol.setColor(Color.RED);
+        body.setSymbol(symbol);
+        
+        AreaLocation location = getLocation();
+        location.getArea().addEntity(new ItemOnGround(body, new AreaLocation(location)));
+        location.getArea().removeEntity(this);
     }
     
     

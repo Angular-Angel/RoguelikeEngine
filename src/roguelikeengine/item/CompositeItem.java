@@ -5,8 +5,6 @@
 package roguelikeengine.item;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import roguelikeengine.area.AreaLocation;
 import roguelikeengine.area.Location;
 import roguelikeengine.display.DisplayChar;
@@ -35,7 +33,7 @@ public class CompositeItem extends Item {
     public CompositeItem(String name, DisplayChar symbol, StatContainer stats, ItemScript use) {
         super(stats);
         this.name = name;
-        this.symbol = symbol;
+        this.symbol = new DisplayChar(symbol);
         useScript = use;
         parts = new ArrayList<>();
     }
@@ -117,6 +115,13 @@ public class CompositeItem extends Item {
     @Override
     public void use(RoguelikeInterface display, Creature b) {
         useScript.run(display, this, b);
+    }
+
+    /**
+     * @param symbol the symbol to set
+     */
+    public void setSymbol(DisplayChar symbol) {
+        this.symbol = symbol;
     }
     
 }

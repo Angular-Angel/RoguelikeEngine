@@ -32,6 +32,10 @@ public class DisplayChar {
         setBgColor(bgColor);
     }
 
+    public DisplayChar(DisplayChar symbol) {
+        this(symbol.getSymbol(), symbol.getColor(), symbol.getBgColor());
+    }
+
     /**
      * @return the symbol
      */
@@ -64,13 +68,10 @@ public class DisplayChar {
         if(getBgColor() != Color.black) {
             g.setColor(getBgColor());
             g.fillRect(x * metrics.getMaxAdvance() + 2, y * metrics.getHeight() + 2,
-                      (x + 1) * metrics.getMaxAdvance(), (y +1) * metrics.getHeight());
+                      (x + 1) * metrics.getMaxAdvance(), (y + 1) * metrics.getHeight());
         }
-        String c = "" ;
         g.setColor(getColor());
-        c = "";
-        c += getSymbol();
-        g.drawString(c, x * metrics.getMaxAdvance() + 2, (y +1) * metrics.getHeight());
+        g.drawString("" + getSymbol(), x * metrics.getMaxAdvance() + 2, (y +1) * metrics.getHeight());
     }
 
     /**
