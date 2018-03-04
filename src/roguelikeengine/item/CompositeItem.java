@@ -12,7 +12,7 @@ import roguelikeengine.area.Location;
 import roguelikeengine.display.DisplayChar;
 import roguelikeengine.display.RoguelikeInterface;
 import roguelikeengine.largeobjects.Attack;
-import roguelikeengine.largeobjects.Body;
+import roguelikeengine.largeobjects.Creature;
 import stat.NoSuchStatException;
 import stat.StatContainer;
 import static roguelikeengine.Game.game;
@@ -115,7 +115,7 @@ public class CompositeItem extends Item {
     }
 
     @Override
-    public void use(RoguelikeInterface display, Body b) {
+    public void use(RoguelikeInterface display, Creature b) {
         useScript.run(display, this, b);
     }
     

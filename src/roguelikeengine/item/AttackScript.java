@@ -5,13 +5,13 @@
 package roguelikeengine.item;
 
 import roguelikeengine.largeobjects.Attack;
-import roguelikeengine.largeobjects.Body;
+import roguelikeengine.largeobjects.Creature;
 /**
  *
  * @author greg
  */
 public interface AttackScript {
     
-    public Attack generateAttack(Body attacker, Item weapon, Attack attack);
+    public Attack generateAttack(Creature attacker, Item weapon, Attack attack);
     
 }

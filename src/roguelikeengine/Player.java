@@ -33,7 +33,7 @@ public class Player extends Controller {
     private final Game game;
     private Rotation rot;
     
-    public Player(Body body, Game game) {
+    public Player(Creature body, Game game) {
         super(body);
         
         rot = Rotation.degree0;
@@ -154,7 +154,7 @@ public class Player extends Controller {
         
     }
     
-    public void bodyInteraction(Body body) {
+    public void bodyInteraction(Creature body) {
         MenuWindow menu = new MenuWindow(game.display, 40, 20);
         menu.addMenuOption(new MenuOption('a', "Attack") {
             @Override
@@ -166,7 +166,7 @@ public class Player extends Controller {
         menu.loop();
     }
     
-    public void attackMenu(Body body) {
+    public void attackMenu(Creature body) {
         MenuWindow menu = new MenuWindow(game.display, "Attack!", 40, 20);
         ArrayList<Attack> attacks = getBody().getAttacks();
         
@@ -229,7 +229,7 @@ public class Player extends Controller {
     
     public void viewItem(Item i) {
         MenuWindow menu = new MenuWindow(game.display, i.getName(), 20, 10);
-        Body body = getBody();
+        Creature body = getBody();
         menu.addMenuOption(new MenuOption('d', "Drop") {
             @Override
             public void select() {

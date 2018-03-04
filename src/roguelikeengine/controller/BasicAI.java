@@ -5,7 +5,7 @@
  */
 package roguelikeengine.controller;
 
-import roguelikeengine.largeobjects.Body;
+import roguelikeengine.largeobjects.Creature;
 
 /**
  *
@@ -13,7 +13,7 @@ import roguelikeengine.largeobjects.Body;
  */
 public class BasicAI extends Controller {
 
-    public BasicAI(Body body) {
+    public BasicAI(Creature body) {
         super(body);
     }
     
@@ -24,7 +24,7 @@ public class BasicAI extends Controller {
 
     @Override
     public boolean act() throws PlayerWantsToQuitException {
-        return !getBody().isAlive();
+        return getBody().isAlive();
     }
     
 }

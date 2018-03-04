@@ -2,7 +2,7 @@ package roguelikeengine.area;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import roguelikeengine.largeobjects.Body;
+import roguelikeengine.largeobjects.Creature;
 import roguelikeengine.display.DisplayChar;
 import roguelikeengine.item.ItemOnGround;
 
@@ -150,7 +150,7 @@ public class AreaLocation extends Location {
     
     public DisplayChar getSymbol() throws NonexistentLocationException {
         if (getTerrain() == null) return new DisplayChar('%', Color.red);
-        Body b = getArea().bodyAt(x, y);
+        Creature b = getArea().bodyAt(x, y);
         if (b != null)
             return b.getDef().getSymbol();
         ArrayList<ItemOnGround> items = getArea().itemsAt(x, y);
@@ -175,7 +175,7 @@ public class AreaLocation extends Location {
     }
     
     @Override
-    public Body bodyAt() {
+    public Creature bodyAt() {
         return getArea().bodyAt(getX(), getY());
     }
     

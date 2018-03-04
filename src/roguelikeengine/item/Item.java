@@ -9,7 +9,7 @@ import roguelikeengine.area.Location;
 import roguelikeengine.display.DisplayChar;
 import roguelikeengine.display.RoguelikeInterface;
 import roguelikeengine.largeobjects.Attack;
-import roguelikeengine.largeobjects.Body;
+import roguelikeengine.largeobjects.Creature;
 import stat.StatContainer;
 
 /**
@@ -60,7 +60,7 @@ public abstract class Item {
     
     public abstract DisplayChar getSymbol();
     
-    public abstract void use(RoguelikeInterface display, Body b);
+    public abstract void use(RoguelikeInterface display, Creature b);
     
     public abstract boolean takeAttack(Attack A);
     

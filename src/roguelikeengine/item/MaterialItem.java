@@ -8,7 +8,7 @@ import roguelikeengine.area.AreaLocation;
 import roguelikeengine.area.Location;
 import stat.Stat;
 import roguelikeengine.largeobjects.Attack;
-import roguelikeengine.largeobjects.Body;
+import roguelikeengine.largeobjects.Creature;
 import stat.NoSuchStatException;
 
 /**
@@ -88,7 +88,7 @@ public class MaterialItem extends Item {
     }
 
     @Override
-    public void use(RoguelikeInterface display, Body b) {
+    public void use(RoguelikeInterface display, Creature b) {
         itemDef.getUseScript().run(display, this, b);
     }
 }

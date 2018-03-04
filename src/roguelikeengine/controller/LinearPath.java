@@ -7,7 +7,7 @@ package roguelikeengine.controller;
 import roguelikeengine.area.Vector;
 import roguelikeengine.area.AreaLocation;
 import roguelikeengine.area.*;
-import roguelikeengine.largeobjects.Body;
+import roguelikeengine.largeobjects.Creature;
 
 /**
  *
@@ -89,7 +89,7 @@ public class LinearPath {
 //        return cur;
 //    }
     
-    public void move(Body b) {
+    public void move(Creature b) {
         AreaLocation ret = new AreaLocation(cur);
         int error = this.error;
         if (dir.x >= dir.y) {

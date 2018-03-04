@@ -4,17 +4,17 @@
  */
 package roguelikeengine.controller;
 
-import roguelikeengine.largeobjects.Body;
+import roguelikeengine.largeobjects.Creature;
 
 /**
  *
  * @author greg
  */
 public class Target implements AIGoal{
-    private Body target;
+    private Creature target;
     private int distance;
     
-    public Target(Body b, int d) {
+    public Target(Creature b, int d) {
         target = b;
         distance = d;
     }
@@ -27,7 +27,7 @@ public class Target implements AIGoal{
     }
 
     @Override
-    public boolean takeAction(Body b) {
+    public boolean takeAction(Creature b) {
         
         return b.moveTo(target.getMap().lowestAdjacent(b.getLocation()));
     }

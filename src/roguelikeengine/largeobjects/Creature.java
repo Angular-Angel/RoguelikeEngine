@@ -14,7 +14,7 @@ import stat.NumericStat;
  *
  * @author greg
  */
-public class Body extends CompositeItem implements Entity {
+public class Creature implements Entity {
     private String name;
     private Controller controller;
     private BodyDefinition def;
@@ -23,13 +23,14 @@ public class Body extends CompositeItem implements Entity {
     private int moves;
     private ArrayList<StatusEffect> effects;
     private Item weapon;
+    private Item body;
     
-    public Body(AreaLocation location, BodyDefinition bodyDef) {
+    public Creature(AreaLocation location, BodyDefinition bodyDef) {
         this("", location, bodyDef);
     }
 
-    public Body(String name, AreaLocation location, BodyDefinition bodyDef) {
-        super(name, bodyDef.getSymbol(), bodyDef.stats.viewStats(), null);
+    public Creature(String name, AreaLocation location, BodyDefinition bodyDef) {
+        body = new CompositeItem(name, bodyDef.getSymbol(), bodyDef.stats.viewStats(), null);
         setLocation(location);
         this.def = bodyDef;
         this.name = name;
@@ -38,9 +39,9 @@ public class Body extends CompositeItem implements Entity {
         moves = 0;
         weapon = null;
         
-        stats.addStat("HP", new NumericStat(stats.getScore("Max HP")));
+        body.stats.addStat("HP", new NumericStat(getBody().stats.getScore("Max HP")));
         
-        refactor();
+        body.refactor();
     }
     
     /**
@@ -48,7 +49,7 @@ public class Body extends CompositeItem implements Entity {
      */
     @Override
     public AreaLocation getLocation() {
-        return (AreaLocation) super.getLocation();
+        return (AreaLocation) getBody().getLocation();
     }
     
     /**
@@ -58,10 +59,7 @@ public class Body extends CompositeItem implements Entity {
      */
     @Override
     public boolean occupies(Location l) {
-        if (l.equals(getLocation()))
-            return true;
-        else
-            return false;
+        return l.equals(getLocation());
     }
     
     public boolean isAlive() {
@@ -80,7 +78,7 @@ public class Body extends CompositeItem implements Entity {
                 location.getArea().addEntity(this);
 
             }
-            super.setLocation((AreaLocation) location);
+            getBody().setLocation((AreaLocation) location);
         }
     }
 
@@ -122,12 +120,10 @@ public class Body extends CompositeItem implements Entity {
     
     public void addItem(Item i) {
         inventory.add(i);
-        addPart(i);
     }
     
     public void removeItem(Item i) {
         inventory.remove(i);
-        removePart(i);
     }
 
     /**
@@ -167,8 +163,8 @@ public class Body extends CompositeItem implements Entity {
 
     public void addMoves() {
         try {
-            if (stats.getScore("Speed") > 0) {
-                this.moves += stats.getScore("Speed");
+            if (getBody().stats.getScore("Speed") > 0) {
+                this.moves += getBody().stats.getScore("Speed");
             }
         } catch (NoSuchStatException e) {
             this.moves += 100;
@@ -180,7 +176,8 @@ public class Body extends CompositeItem implements Entity {
         effects.add(effect);
     }
     
-    public void attack(Body body, Attack attack) {
+    public void attack(Creature body, Attack attack) {
+        addMoves(-100);
         body.beAttacked(attack);
     }
     
@@ -195,7 +192,6 @@ public class Body extends CompositeItem implements Entity {
         
     }
 
-    @Override
     public String getName() {
         return name;
     }
@@ -214,13 +210,19 @@ public class Body extends CompositeItem implements Entity {
         this.weapon = weapon;
     }
     
-    @Override
     public ArrayList<Attack> getAttacks() {
-        ArrayList<Attack> attacks = super.getAttacks();
+        ArrayList<Attack> attacks = getBody().getAttacks();
         if (weapon != null) {
             attacks.addAll(weapon.getAttacks());
         }
         return attacks;
+    }
+
+    /**
+     * @return the body
+     */
+    public Item getBody() {
+        return body;
     }
     
     

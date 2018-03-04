@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import roguelikeengine.display.Rotation;
 import roguelikeengine.item.Item;
 import roguelikeengine.item.ItemOnGround;
-import roguelikeengine.largeobjects.Body;
+import roguelikeengine.largeobjects.Creature;
 import roguelikeengine.largeobjects.Entity;
 
 
@@ -181,11 +181,11 @@ public class LocalArea {
      * @return the body if there is one, otherwise null.
      */
     
-    public Body bodyAt(int x, int y) {
+    public Creature bodyAt(int x, int y) {
         for (Entity e : entities) {
             try {
-            if ((e instanceof Body) && e.occupies(new AreaLocation(this, x, y)))
-                return (Body) e;
+            if ((e instanceof Creature) && e.occupies(new AreaLocation(this, x, y)))
+                return (Creature) e;
             } catch (IllegalArgumentException ex) {
                 return null;
             }

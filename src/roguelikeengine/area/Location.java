@@ -1,6 +1,6 @@
 package roguelikeengine.area;
 
-import roguelikeengine.largeobjects.Body;
+import roguelikeengine.largeobjects.Creature;
 import roguelikeengine.display.DisplayChar;
 
 /**
@@ -56,7 +56,7 @@ public abstract class Location {
     
     public abstract DisplayChar getSymbol() throws NonexistentLocationException;
     
-    public abstract Body bodyAt();
+    public abstract Creature bodyAt();
     
     public int distance(Location l) {
         return Math.max(Math.abs(getX() - l.getX()), 

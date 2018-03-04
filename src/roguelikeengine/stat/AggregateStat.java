@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import roguelikeengine.item.CompositeItem;
 import roguelikeengine.item.Item;
-import roguelikeengine.largeobjects.Body;
+import roguelikeengine.largeobjects.Creature;
 import stat.NoSuchStatException;
 
 /**
@@ -62,7 +62,7 @@ public class AggregateStat implements Stat {
             }
             if (type == AVERAGE) score /= num;
         } catch(NoSuchStatException | NullPointerException ex) {
-            Logger.getLogger(Body.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Creature.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
