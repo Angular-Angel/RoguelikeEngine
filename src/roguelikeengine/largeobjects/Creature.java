@@ -235,7 +235,7 @@ public class Creature implements Entity {
         body.setSymbol(symbol);
         
         AreaLocation location = getLocation();
-        location.getArea().addEntity(new ItemOnGround(body, new AreaLocation(location)));
+        location.getArea().addItem(body, location.getX(), location.getY());
         location.getArea().removeEntity(this);
     }
     

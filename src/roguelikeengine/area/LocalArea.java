@@ -194,7 +194,7 @@ public class LocalArea {
     }
     
     public ArrayList<ItemOnGround> itemsAt(int x, int y) {
-        ArrayList<ItemOnGround> ret = new ArrayList<ItemOnGround>();
+        ArrayList<ItemOnGround> ret = new ArrayList<>();
         Location l = new AreaLocation(this, x, y);
         for (Entity e : entities) {
             if ((e instanceof ItemOnGround) && e.occupies(l))

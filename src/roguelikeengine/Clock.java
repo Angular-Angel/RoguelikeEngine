@@ -38,7 +38,6 @@ public class Clock {
                 for (Actor a : actors) {
                     boolean alive = a.act();
                     if (!alive) {
-                        System.out.println("!!!!");
                         deadActors.add(a);
                     }
                 }

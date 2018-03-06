@@ -61,7 +61,7 @@ public class CompositeItem extends Item {
         return parts;
     }
     
-    public Item getRandomPart() throws NoSuchStatException {
+    public Item getRandomPart() {
         float size = stats.getScore("Size");
         int target = game.random.nextInt((int) size);
         for (Item part : getParts()) {
