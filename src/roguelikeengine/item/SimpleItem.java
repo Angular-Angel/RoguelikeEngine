@@ -43,7 +43,7 @@ public class SimpleItem extends Item {
 
     @Override
     public DisplayChar getSymbol() {
-        return def.getSymbol();
+        return def.symbol;
     }
 
     @Override

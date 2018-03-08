@@ -50,7 +50,7 @@ public class MaterialItem extends Item {
 
     @Override
     public DisplayChar getSymbol() {
-        return new DisplayChar(getItemDef().getSymbol().getSymbol(), 
+        return new DisplayChar(getItemDef().symbol.getSymbol(), 
                 getMaterial().getColor());
 
     }

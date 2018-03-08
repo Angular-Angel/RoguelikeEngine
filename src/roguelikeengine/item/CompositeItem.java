@@ -37,6 +37,10 @@ public class CompositeItem extends Item {
         useScript = use;
         parts = new ArrayList<>();
     }
+
+    CompositeItem(String[] name, DisplayChar symbol, StatContainer stats, ItemScript useScript) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     public void addPart(Item part) {
         parts.add(part);

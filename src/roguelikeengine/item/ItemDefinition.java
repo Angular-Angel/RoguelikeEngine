@@ -13,14 +13,15 @@ import roguelikeengine.largeobjects.Attack;
  *
  * @author Greg
  */
-public class ItemDefinition{
+public class ItemDefinition {
     
-    private DisplayChar symbol;
-    private String[] name;
-    private ArrayList<Attack> attacks;
-    private MaterialDefinition defmat;
-    private ItemScript useScript;
-    public StatContainer stats;
+    public final DisplayChar symbol;
+    public final String[] name;
+    public final ArrayList<Attack> attacks;
+    public final MaterialDefinition defmat;
+    public final ItemScript useScript;
+    public final StatContainer stats;
+    public final ItemDefinition[] components;
     
     public ItemDefinition(DisplayChar d, String[] s) {
         this(d, s, null, new StatContainer(), null);
@@ -28,6 +29,11 @@ public class ItemDefinition{
     
     public ItemDefinition(DisplayChar d, String[] names, MaterialDefinition mat, 
             StatContainer stats, ItemScript use) {
+        this(d, names, mat, stats, use, null);
+    }
+    
+    public ItemDefinition(DisplayChar d, String[] names, MaterialDefinition mat, 
+            StatContainer stats, ItemScript use, ItemDefinition[] components) {
         this.stats = new StatContainer();
         this.stats.addAllStats(stats);
         this.symbol = d;
@@ -35,21 +41,9 @@ public class ItemDefinition{
         defmat = mat;
         attacks = new ArrayList<>();
         useScript = use;
+        this.components = components;
     }
 
-    /**
-     * @return the symbol
-     */
-    public DisplayChar getSymbol() {
-        return symbol;
-    }
-
-    /**
-     * @param symbol the symbol to set
-     */
-    public void setSymbol(DisplayChar symbol) {
-        this.symbol = symbol;
-    }
 
     /**
      * @return the Name
@@ -59,12 +53,16 @@ public class ItemDefinition{
         return name[i];
         else throw new IllegalArgumentException ();
     }
-
-    /**
-     * @param Name the Name to set
-     */
-    public void setName(String[] name) {
-        this.name = name;
+    
+    public Item generateItem() {
+        if (components != null) {
+            CompositeItem compositeItem = new CompositeItem(name[0], symbol, stats, useScript);
+            for (ItemDefinition itemDef : components)
+                compositeItem.addPart(itemDef.generateItem());
+            return compositeItem;
+        } else if(defmat != null)
+            return new MaterialItem(defmat, this);
+        else return new SimpleItem(this);
     }
     
     public void addAttack(Attack attack) {

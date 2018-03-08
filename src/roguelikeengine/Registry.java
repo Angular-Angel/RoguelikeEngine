@@ -145,6 +145,7 @@ public class Registry extends RawReader {
                     
         for (Object o : (JSONArray) item.get(3)) {
             ret.addPart(readJSONItem((JSONArray) o));
+            System.out.println(readJSONItem((JSONArray) o).getName());
         }
         return ret;
     }
@@ -167,14 +168,13 @@ public class Registry extends RawReader {
                     
                     StatContainer stats = readJSONStats((JSONArray) m.get("stats"));
                     
-                    //JSONArray bodyparts = (JSONArray) m.get("bodyparts");
                     BodyDefinition bodydef;
                     BiologyScript script = (BiologyScript) readGroovyScript(new File((String) m.get("script")));
-                    bodydef = new BodyDefinition(name, d, stats, script);
-                     
-//                    for (Object o : bodyparts) {
-//                        bodydef.bodyTemplate.addPart(readJSONItem((JSONArray) o));
-//                    }
+                    if (m.containsKey("bodytemplate")) {
+                        ItemDefinition bodyTemplate = items.get((String) m.get("bodytemplate"));
+                        bodydef = new BodyDefinition(name, d, stats, script, bodyTemplate);
+                    } else bodydef = new BodyDefinition(name, d, stats, script, null);
+                    
                     bodyTypes.put(name, bodydef);
                 }
  
@@ -205,4 +205,5 @@ public class Registry extends RawReader {
 		Logger.getLogger(Registry.class.getName()).log(Level.SEVERE, null, e);
 	} 
     }
+
 }
