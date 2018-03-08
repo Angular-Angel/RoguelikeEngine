@@ -20,7 +20,7 @@ import stat.NumericStat;
 public class Creature implements Entity {
     private String name;
     private Controller controller;
-    private BodyDefinition def;
+    private CreatureDefinition def;
     private ArrayList<Item> inventory;
     private DijkstraMap map;
     private int moves;
@@ -28,11 +28,11 @@ public class Creature implements Entity {
     private Item weapon;
     private CompositeItem body;
     
-    public Creature(AreaLocation location, BodyDefinition bodyDef) {
+    public Creature(AreaLocation location, CreatureDefinition bodyDef) {
         this("", location, bodyDef);
     }
 
-    public Creature(String name, AreaLocation location, BodyDefinition bodyDef) {
+    public Creature(String name, AreaLocation location, CreatureDefinition bodyDef) {
         body = new CompositeItem(name, bodyDef.getSymbol(), bodyDef.stats.viewStats(), null);
         setLocation(location);
         this.def = bodyDef;
@@ -102,7 +102,7 @@ public class Creature implements Entity {
     /**
      * @return the BodyDefinition
      */
-    public BodyDefinition getDef() {
+    public CreatureDefinition getDef() {
         return def;
     }
     

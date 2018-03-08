@@ -25,7 +25,7 @@ import roguelikeengine.area.TerrainDefinition;
 import roguelikeengine.display.DisplayChar;
 import roguelikeengine.item.DamageScript;
 import roguelikeengine.largeobjects.BiologyScript;
-import roguelikeengine.largeobjects.BodyDefinition;
+import roguelikeengine.largeobjects.CreatureDefinition;
 import roguelikeengine.largeobjects.MeleeAttack;
 import stat.StatContainer;
 import util.RawReader;
@@ -38,7 +38,7 @@ public class Registry extends RawReader {
     
     public HashMap<String, MaterialDefinition> materials;
     public HashMap<String, ItemDefinition> items;
-    public HashMap<String, BodyDefinition> bodyTypes;
+    public HashMap<String, CreatureDefinition> bodyTypes;
     public HashMap<String, TerrainDefinition> terrainTypes;
     
     public Registry() {
@@ -168,12 +168,12 @@ public class Registry extends RawReader {
                     
                     StatContainer stats = readJSONStats((JSONArray) m.get("stats"));
                     
-                    BodyDefinition bodydef;
+                    CreatureDefinition bodydef;
                     BiologyScript script = (BiologyScript) readGroovyScript(new File((String) m.get("script")));
                     if (m.containsKey("bodytemplate")) {
                         ItemDefinition bodyTemplate = items.get((String) m.get("bodytemplate"));
-                        bodydef = new BodyDefinition(name, d, stats, script, bodyTemplate);
-                    } else bodydef = new BodyDefinition(name, d, stats, script, null);
+                        bodydef = new CreatureDefinition(name, d, stats, script, bodyTemplate);
+                    } else bodydef = new CreatureDefinition(name, d, stats, script, null);
                     
                     bodyTypes.put(name, bodydef);
                 }
