@@ -24,7 +24,7 @@ public class BasicAI extends Controller {
 
     @Override
     public boolean act() throws PlayerWantsToQuitException {
-        return getBody().isAlive();
+        return getCreature().isAlive();
     }
     
 }

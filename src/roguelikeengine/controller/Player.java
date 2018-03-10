@@ -1,4 +1,4 @@
-package roguelikeengine;
+package roguelikeengine.controller;
 
 import roguelikeengine.display.Rotation;
 import roguelikeengine.display.Window;
@@ -18,6 +18,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import roguelikeengine.Game;
 import roguelikeengine.display.MenuOption;
 import roguelikeengine.display.MenuWindow;
 import roguelikeengine.display.ToggleWindow;
@@ -46,22 +47,22 @@ public class Player extends Controller {
     public void view() {
         try {
             //this variable is used  lot, so let's copy it to a local.
-            int sightRange = (int) getBody().getDef().stats.getScore("Sight Range");
+            int sightRange = (int) getCreature().getDef().stats.getScore("Sight Range");
             //these too.
-            int x = getBody().getLocation().getX();
-            int y = getBody().getLocation().getY();
+            int x = getCreature().getLocation().getX();
+            int y = getCreature().getLocation().getY();
             //clear the display so that we don't have any left over bits.
             game.display.setAll(new DisplayChar(' ', Color.black));
             //send a line in each direction to see what we can see, then write to the
             //display.
             for (int i = 0; i <= sightRange*2; i++) {
-                visionLine(new LocationLine(getBody().getLocation(), 
+                visionLine(new LocationLine(getCreature().getLocation(), 
                         x + sightRange, y - sightRange + i, true, false));
-                visionLine(new LocationLine(getBody().getLocation(), 
+                visionLine(new LocationLine(getCreature().getLocation(), 
                         x - sightRange, y - sightRange + i, true, false));
-                visionLine(new LocationLine(getBody().getLocation(), 
+                visionLine(new LocationLine(getCreature().getLocation(), 
                         x - sightRange + i, y + sightRange, true, false));
-                visionLine(new LocationLine(getBody().getLocation(), 
+                visionLine(new LocationLine(getCreature().getLocation(), 
                         x - sightRange + i, y - sightRange, true, false));
             }
             //rotate and mirror according to the player, so as to not cause sudden 
@@ -141,12 +142,12 @@ public class Player extends Controller {
             
             dir = dir.rotate(getRotation());
             //find the location to move the player to.
-            AreaLocation l = new AreaLocation(getBody().getLocation());
+            AreaLocation l = new AreaLocation(getCreature().getLocation());
             l.move(dir.dx, dir.dy);
             //move the player, and adjust things if they cross a border.
             if (l.bodyAt() != null) {
                 bodyInteraction(l.bodyAt());
-            } else if (getBody().moveTo(l) && l.getTerrain() == null) {
+            } else if (getCreature().moveTo(l) && l.getTerrain() == null) {
                 LocalArea.BorderArea b = l.getArea().getBorderArea(l.getX(), l.getY());
                 addRotation(l.getArea().getBorderArea(l.getX(), l.getY()).getRotation());
             }
@@ -159,11 +160,11 @@ public class Player extends Controller {
         menu.addMenuOption(new MenuOption('a', "Unarmed") {
             @Override
             public void select() {
-                attackMenu(getBody().getBody(), body);
+                attackMenu(getCreature().getBody(), body);
                 menu.end();
             }
         });
-        Item weapon = getBody().getWeapon();
+        Item weapon = getCreature().getWeapon();
         if (weapon != null) {
             menu.addMenuOption(new MenuOption('w', weapon.getName()) {
                 @Override
@@ -185,7 +186,7 @@ public class Player extends Controller {
             menu.addMenuOption(new MenuOption((char)(97 + i), attack.name) {
                 @Override
                 public void select() {
-                    getBody().attack(creature, attack);
+                    getCreature().attack(creature, attack);
                     menu.end();
                 }
             });
@@ -196,7 +197,7 @@ public class Player extends Controller {
     }
     
     public void pickUpItems() {
-        Location l = getBody().getLocation();
+        Location l = getCreature().getLocation();
         ArrayList<ItemOnGround> items = l.getArea().itemsAt(l.getX(), l.getY());
         ToggleWindow menu = new ToggleWindow(game.display, "Items", 20, 10);
         for (int i = 0; i < items.size(); i++) {
@@ -205,7 +206,7 @@ public class Player extends Controller {
             menu.addMenuOption(new MenuOption((char)(97 + i), item.getName()) {
                 @Override
                 public void select() {
-                    getBody().addItem(item);
+                    getCreature().addItem(item);
                     l.getArea().removeEntity(itemOnGround);
                 }
             });
@@ -217,7 +218,7 @@ public class Player extends Controller {
     public void viewInventory() {
         MenuWindow menu = new MenuWindow(game.display, "Inventory", 40, 20);
         
-        ArrayList<Item> inventory = getBody().getInventory();
+        ArrayList<Item> inventory = getCreature().getInventory();
         for (int i = 0; i < inventory.size(); i++) {
             Item item = inventory.get(i);
             menu.addMenuOption(new MenuOption((char)(97 + i), item.getName()) {
@@ -234,12 +235,12 @@ public class Player extends Controller {
     }
     
     public void wield(Item i) {
-        getBody().setWeapon(i);
+        getCreature().setWeapon(i);
     }
     
     public void viewItem(Item i) {
         MenuWindow menu = new MenuWindow(game.display, i.getName(), 20, 10);
-        Creature body = getBody();
+        Creature body = getCreature();
         menu.addMenuOption(new MenuOption('d', "Drop") {
             @Override
             public void select() {
@@ -304,11 +305,11 @@ public class Player extends Controller {
     
     @Override
     public boolean act() throws PlayerWantsToQuitException{
-        if (!getBody().isAlive()) 
+        if (!getCreature().isAlive()) 
             return false;
-        getBody().step();
+        getCreature().step();
         addMoves();
-        for (int i = 0; getBody().getMoves() > 0 && i < 100; i++) {
+        for (int i = 0; getCreature().getMoves() > 0 && i < 100; i++) {
             view();
                 //handle the input, and if the player wants to quit, quit.
             handleInput();
@@ -318,6 +319,6 @@ public class Player extends Controller {
 
     @Override
     public void addMoves() {
-        getBody().addMoves();
+        getCreature().addMoves();
     }
 }

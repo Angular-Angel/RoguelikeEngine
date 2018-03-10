@@ -24,7 +24,7 @@ public class CompositeItem extends Item {
         this.symbol = new DisplayChar(itemDef.symbol);
         parts = new ArrayList<>();
         for (ItemDefinition component : itemDef.components)
-                addPart(component.generateItem());
+            addPart(component.generateItem());
     }
     
     public void addPart(Item part) {

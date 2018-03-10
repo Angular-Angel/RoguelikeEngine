@@ -28,7 +28,7 @@ public abstract class Controller implements Actor {
     /**
      * @return the body
      */
-    public Creature getBody() {
+    public Creature getCreature() {
         return body;
     }
 
@@ -47,7 +47,7 @@ public abstract class Controller implements Actor {
 
     @Override
     public void addMoves(){
-        getBody().addMoves();
+        getCreature().addMoves();
     }
 
     /**
