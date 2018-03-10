@@ -61,7 +61,12 @@ public abstract class Item {
     }
     
     public String getName() {
-        return itemDef.name[0];
+        String name = "";
+        for (ItemMod i : mods) {
+            if (!name.contains(i.getAdjective())) name += (i.getAdjective() + " ");
+        }
+        name += itemDef.getName(0);
+        return name;
     }
     
     public void use(RoguelikeInterface display, Creature b) {

@@ -156,26 +156,36 @@ public class Player extends Controller {
     
     public void bodyInteraction(Creature body) {
         MenuWindow menu = new MenuWindow(game.display, 40, 20);
-        menu.addMenuOption(new MenuOption('a', "Attack") {
+        menu.addMenuOption(new MenuOption('a', "Unarmed") {
             @Override
             public void select() {
-                attackMenu(body);
+                attackMenu(getBody().getBody(), body);
                 menu.end();
             }
         });
+        Item weapon = getBody().getWeapon();
+        if (weapon != null) {
+            menu.addMenuOption(new MenuOption('w', weapon.getName()) {
+                @Override
+                public void select() {
+                    attackMenu(weapon, body);
+                    menu.end();
+                }
+            });
+        }
         menu.loop();
     }
     
-    public void attackMenu(Creature body) {
-        MenuWindow menu = new MenuWindow(game.display, "Attack!", 40, 20);
-        ArrayList<Attack> attacks = getBody().getAttacks();
+    public void attackMenu(Item item, Creature creature) {
+        MenuWindow menu = new MenuWindow(game.display, item.getName(), 40, 20);
+        ArrayList<Attack> attacks = item.getAttacks();
         
         for (int i = 0; i < attacks.size(); i++) {
             Attack attack = attacks.get(i);
             menu.addMenuOption(new MenuOption((char)(97 + i), attack.name) {
                 @Override
                 public void select() {
-                    getBody().attack(body, attack);
+                    getBody().attack(creature, attack);
                     menu.end();
                 }
             });
