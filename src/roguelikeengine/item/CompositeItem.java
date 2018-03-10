@@ -8,11 +8,7 @@ import java.util.ArrayList;
 import roguelikeengine.area.AreaLocation;
 import roguelikeengine.area.Location;
 import roguelikeengine.display.DisplayChar;
-import roguelikeengine.display.RoguelikeInterface;
 import roguelikeengine.largeobjects.Attack;
-import roguelikeengine.largeobjects.Creature;
-import stat.NoSuchStatException;
-import stat.StatContainer;
 import static roguelikeengine.Game.game;
 
 /**
@@ -22,24 +18,13 @@ import static roguelikeengine.Game.game;
 public class CompositeItem extends Item {
     
     protected ArrayList<Item> parts;
-    private String name;
-    private DisplayChar symbol;
-    private ItemScript useScript;
     
-    public CompositeItem(String name, DisplayChar symbol) {
-        this(name, symbol, new StatContainer(), null);
-    }
-    
-    public CompositeItem(String name, DisplayChar symbol, StatContainer stats, ItemScript use) {
-        super(stats);
-        this.name = name;
-        this.symbol = new DisplayChar(symbol);
-        useScript = use;
+    public CompositeItem(ItemDefinition itemDef) {
+        super(itemDef);
+        this.symbol = new DisplayChar(itemDef.symbol);
         parts = new ArrayList<>();
-    }
-
-    CompositeItem(String[] name, DisplayChar symbol, StatContainer stats, ItemScript useScript) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (ItemDefinition component : itemDef.components)
+                addPart(component.generateItem());
     }
     
     public void addPart(Item part) {
@@ -77,16 +62,6 @@ public class CompositeItem extends Item {
     }
     
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public DisplayChar getSymbol() {
-        return symbol;
-    }
-    
-    @Override
     public void refactor() {
         for (Item i : parts) i.refactor();
         super.refactor();
@@ -115,17 +90,14 @@ public class CompositeItem extends Item {
             itemLocation.getContainer().removePart(this);
         }
     }
-
+    
     @Override
-    public void use(RoguelikeInterface display, Creature b) {
-        useScript.run(display, this, b);
-    }
-
-    /**
-     * @param symbol the symbol to set
-     */
-    public void setSymbol(DisplayChar symbol) {
-        this.symbol = symbol;
+    public  ArrayList<Attack> getAttacks() {
+        ArrayList<Attack> attackListing = super.getAttacks();
+        for (Item i : parts) {
+            attackListing.addAll(i.getAttacks());
+        }
+        return attackListing;
     }
     
 }

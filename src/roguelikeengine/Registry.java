@@ -100,13 +100,25 @@ public class Registry extends RawReader {
                     defmat = materials.get((String) m.get("defmat"));
                     else defmat = null;
                     
+                    ItemDefinition[] components = null;
+                    if (m.containsKey("components")) {
+                        JSONArray componentsJSON = (JSONArray) m.get("components");
+                        components = new ItemDefinition[componentsJSON.size()];
+                        int i = 0;
+                        for (Object o : componentsJSON) {
+                            String component = (String) o;
+                            components[i] = items.get(component);
+                            i++;
+                        }
+                    }
+                    
                     StatContainer stats = readJSONStats((JSONArray) m.get("stats"));
                     ItemDefinition itemdef;
                     if (m.containsKey("script")) {
                         ItemScript use = (ItemScript) readGroovyScript(new File((String) m.get("script")));
-                        itemdef = new ItemDefinition(symbol, names, defmat, stats, use);
+                        itemdef = new ItemDefinition(symbol, names, defmat, stats, use, components);
                     } else {
-                        itemdef = new ItemDefinition(symbol, names, defmat, stats, null);
+                        itemdef = new ItemDefinition(symbol, names, defmat, stats, null, components);
                     }
                     
                     JSONArray attacks = (JSONArray) m.get("attacks");
@@ -125,36 +137,36 @@ public class Registry extends RawReader {
 	} 
     }
     
-    public MaterialItem readJSONSimpleItem(JSONArray item) {
+    public MaterialItem readJSONMaterialItem(JSONArray item) {
         MaterialDefinition matdef = materials.get((String) item.get(0));
         ItemDefinition itemdef = items.get((String) item.get(1));
         return new MaterialItem(matdef, itemdef);
     }
     
-    public CompositeItem readJSONCompositeItem(JSONArray item) {
-        String name = (String) item.get(0);
-        DisplayChar display = readJSONDisplayChar((JSONArray) item.get(1));
-        StatContainer stats = readJSONStats((JSONArray) item.get(2));
-        CompositeItem ret;
-        if (item.size() == 5) {
-            ItemScript use = (ItemScript) readGroovyScript(new File((String) item.get(4)));
-            ret = new CompositeItem(name, display, stats, use);
-        } else {
-            ret = new CompositeItem(name, display, stats, null);
-        }
-                    
-        for (Object o : (JSONArray) item.get(3)) {
-            ret.addPart(readJSONItem((JSONArray) o));
-            System.out.println(readJSONItem((JSONArray) o).getName());
-        }
-        return ret;
-    }
-    
-    public Item readJSONItem(JSONArray item) {
-        if (item.size() == 4) return readJSONCompositeItem(item);
-        else if (item.size() == 2) return readJSONSimpleItem(item);
-        return null;
-    }
+//    public CompositeItem readJSONCompositeItem(JSONArray item) {
+//        String name = (String) item.get(0);
+//        DisplayChar display = readJSONDisplayChar((JSONArray) item.get(1));
+//        StatContainer stats = readJSONStats((JSONArray) item.get(2));
+//        CompositeItem ret;
+//        if (item.size() == 5) {
+//            ItemScript use = (ItemScript) readGroovyScript(new File((String) item.get(4)));
+//            ret = new CompositeItem(name, display, stats, use);
+//        } else {
+//            ret = new CompositeItem(name, display, stats, null);
+//        }
+//                    
+//        for (Object o : (JSONArray) item.get(3)) {
+//            ret.addPart(readJSONItem((JSONArray) o));
+//            System.out.println(readJSONItem((JSONArray) o).getName());
+//        }
+//        return ret;
+//    }
+//    
+//    public Item readJSONItem(JSONArray item) {
+//        if (item.size() == 4) return readJSONCompositeItem(item);
+//        else if (item.size() == 2) return readJSONSimpleItem(item);
+//        return null;
+//    }
     
     public void readJSONBodyDefs(File file) {
         JSONParser parser = new JSONParser();

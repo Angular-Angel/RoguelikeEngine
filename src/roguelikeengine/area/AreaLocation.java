@@ -155,7 +155,7 @@ public class AreaLocation extends Location {
             return b.getDef().getSymbol();
         ArrayList<ItemOnGround> items = getArea().itemsAt(x, y);
         if (items.size() > 0)
-            return items.get(items.size() - 1).getItem().getSymbol();
+            return items.get(items.size() - 1).getItem().symbol;
         
         if (getArea().getTerrain(getX(), getY()) == null) throw new 
                 NonexistentLocationException("Tried to access: " + getString());

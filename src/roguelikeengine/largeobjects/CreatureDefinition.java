@@ -10,10 +10,10 @@ import roguelikeengine.item.ItemDefinition;
  * @author greg
  */
 public class CreatureDefinition{
-    private final String name;
-    private final DisplayChar symbol;
-    private final BiologyScript bioScript;
-    private final ItemDefinition bodyTemplate;
+    public final String name;
+    public final DisplayChar symbol;
+    public final BiologyScript bioScript;
+    public final ItemDefinition bodyTemplate;
     public StatContainer stats;
     
     public CreatureDefinition(String name, DisplayChar d, StatContainer stats, BiologyScript script, ItemDefinition bodyTemplate) {

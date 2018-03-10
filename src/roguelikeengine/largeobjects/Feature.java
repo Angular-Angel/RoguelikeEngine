@@ -8,8 +8,8 @@ package roguelikeengine.largeobjects;
 
 import roguelikeengine.area.AreaLocation;
 import roguelikeengine.area.Location;
-import roguelikeengine.display.DisplayChar;
 import roguelikeengine.item.CompositeItem;
+import roguelikeengine.item.ItemDefinition;
 
 /**
  *
@@ -17,8 +17,8 @@ import roguelikeengine.item.CompositeItem;
  */
 public class Feature extends CompositeItem implements Entity {
 
-    public Feature(String name, DisplayChar symbol) {
-        super(name, symbol);
+    public Feature(ItemDefinition itemDef) {
+        super(itemDef);
     }
 
     /**

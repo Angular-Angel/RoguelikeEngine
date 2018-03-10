@@ -21,7 +21,7 @@ public class SimpleItem extends Item {
     ItemDefinition def;
 
     public SimpleItem(ItemDefinition def) {
-        super(def.stats);
+        super(def);
         this.def = def;
         addAttacks(def.getAttacks());
     }
@@ -39,11 +39,6 @@ public class SimpleItem extends Item {
         }
         name += def.getName(0);
         return name;
-    }
-
-    @Override
-    public DisplayChar getSymbol() {
-        return def.symbol;
     }
 
     @Override

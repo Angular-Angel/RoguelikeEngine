@@ -10,7 +10,6 @@ import roguelikeengine.area.Location;
 import roguelikeengine.area.AreaLocation;
 import java.util.*;
 import roguelikeengine.display.DisplayChar;
-import roguelikeengine.item.ItemOnGround;
 import stat.NumericStat;
 
 /**
@@ -26,17 +25,17 @@ public class Creature implements Entity {
     private int moves;
     private ArrayList<StatusEffect> effects;
     private Item weapon;
-    private CompositeItem body;
+    private Item body;
     
     public Creature(AreaLocation location, CreatureDefinition bodyDef) {
         this("", location, bodyDef);
     }
 
     public Creature(String name, AreaLocation location, CreatureDefinition bodyDef) {
-        body = new CompositeItem(name, bodyDef.getSymbol(), bodyDef.stats.viewStats(), null);
-        setLocation(location);
         this.def = bodyDef;
         this.name = name;
+        body = def.bodyTemplate.generateItem();
+        body.stats.addAllStats(bodyDef.stats.viewStats());
         inventory = new ArrayList<>();
         effects = new ArrayList<>();
         moves = 0;
@@ -45,6 +44,8 @@ public class Creature implements Entity {
         body.stats.addStat("HP", new NumericStat(getBody().stats.getScore("Max HP")));
         
         body.refactor();
+        
+        setLocation(location);
     }
     
     /**
@@ -230,9 +231,9 @@ public class Creature implements Entity {
     }
 
     private void die() {
-        DisplayChar symbol = body.getSymbol();
+        DisplayChar symbol = body.symbol;
         symbol.setColor(Color.RED);
-        body.setSymbol(symbol);
+        body.symbol = symbol;
         
         AreaLocation location = getLocation();
         location.getArea().addItem(body, location.getX(), location.getY());

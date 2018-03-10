@@ -64,7 +64,7 @@ public class ItemLocation extends Location {
 
     @Override
     public DisplayChar getSymbol() throws NonexistentLocationException {
-        return container.getSymbol();}
+        return container.symbol;}
 
     @Override
     public Creature bodyAt() {

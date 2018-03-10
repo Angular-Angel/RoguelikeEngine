@@ -20,12 +20,11 @@ public class MaterialItem extends Item {
     private MaterialDefinition material;
     
     public MaterialItem(MaterialDefinition m, ItemDefinition itemDef) {
-        super();
+        super(itemDef);
         this.itemDef = itemDef;
         material = m;
         stats.addAllStats(material.stats.viewStats());
         stats.addAllStats(itemDef.stats.viewStats());
-        addAttacks(itemDef.getAttacks());
         refactor();
     }
 
@@ -46,13 +45,6 @@ public class MaterialItem extends Item {
             sb.append(getMaterial().getName() + " " + getItemDef().getName(0));
         } else {sb.append(getItemDef().getName(0));}
         return sb.toString();
-    }
-
-    @Override
-    public DisplayChar getSymbol() {
-        return new DisplayChar(getItemDef().symbol.getSymbol(), 
-                getMaterial().getColor());
-
     }
 
     /**

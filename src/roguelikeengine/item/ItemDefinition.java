@@ -56,10 +56,7 @@ public class ItemDefinition {
     
     public Item generateItem() {
         if (components != null) {
-            CompositeItem compositeItem = new CompositeItem(name[0], symbol, stats, useScript);
-            for (ItemDefinition itemDef : components)
-                compositeItem.addPart(itemDef.generateItem());
-            return compositeItem;
+            return new CompositeItem(this);
         } else if(defmat != null)
             return new MaterialItem(defmat, this);
         else return new SimpleItem(this);

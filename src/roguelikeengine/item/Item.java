@@ -20,20 +20,20 @@ public abstract class Item {
     protected ArrayList<ItemMod> mods;
     protected ArrayList<Attack> attacks;
     private Location location;
+    public DisplayChar symbol;
     public StatContainer stats;
+    public final ItemDefinition itemDef;
 
-    public Item() {
-        this(new StatContainer());
-    }
-    
-    public Item(StatContainer stats) {
+    public Item(ItemDefinition itemDef) {
+        this.itemDef = itemDef;
         this.stats = new StatContainer();
-        this.stats.addAllStats(stats);
-        mods = new ArrayList<>();
-        attacks = new ArrayList<>();
+        this.mods =  new ArrayList<>();
+        this.attacks = new ArrayList<>();
+        this.symbol = new DisplayChar(itemDef.symbol);
+        
+        stats.addAllStats(itemDef.stats.viewStats());
+        addAttacks(itemDef.getAttacks());
     }
-
-    
     
     public void addAttack(Attack attack) {
         attacks.add(attack);
@@ -53,14 +53,20 @@ public abstract class Item {
     public abstract boolean containsPart(String s);
     
     public ArrayList<Attack> getAttacks() {
-        return (ArrayList<Attack>) attacks.clone();
+        ArrayList<Attack> attackListing = new ArrayList<>();
+        for (Attack a : attacks) {
+            attackListing.add(a);
+        }
+        return attackListing;
     }
     
-    public abstract String getName();
+    public String getName() {
+        return itemDef.name[0];
+    }
     
-    public abstract DisplayChar getSymbol();
-    
-    public abstract void use(RoguelikeInterface display, Creature b);
+    public void use(RoguelikeInterface display, Creature b) {
+        itemDef.useScript.run(display, this, b);
+    }
     
     public abstract boolean takeAttack(Attack A);
     
