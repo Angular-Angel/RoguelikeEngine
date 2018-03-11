@@ -20,14 +20,16 @@ public class MaterialItem extends Item {
 
     @Override
     public String getName() {
-        StringBuilder sb = new StringBuilder();
+        String ret = "";
         for (ItemMod i : mods) {
-            if (!sb.toString().contains(i.getAdjective()))sb.append(i.getAdjective() + " ");
+            if (!ret.contains(i.getAdjective())) ret += i.getAdjective() + " ";
         }
         if (itemDef.defaultMaterial() != getMaterial()) {
-            sb.append(getMaterial().getName() + " " + itemDef.getName(0));
-        } else {sb.append(itemDef.getName(0));}
-        return sb.toString();
+            ret += getMaterial().getName() + " " + itemDef.getName(0);
+        } else {
+            ret += itemDef.getName(0);
+        }
+        return ret;
     }
 
     /**
