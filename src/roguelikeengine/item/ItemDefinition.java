@@ -59,7 +59,7 @@ public class ItemDefinition {
             return new CompositeItem(this);
         } else if(defmat != null)
             return new MaterialItem(defmat, this);
-        else return new SimpleItem(this);
+        else return new Item(this);
     }
     
     public void addAttack(Attack attack) {

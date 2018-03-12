@@ -6,10 +6,8 @@ package roguelikeengine;
 
 import roguelikeengine.item.MaterialItem;
 import roguelikeengine.item.ItemDefinition;
-import roguelikeengine.item.Item;
 import roguelikeengine.item.ItemScript;
 import roguelikeengine.item.MaterialDefinition;
-import roguelikeengine.item.CompositeItem;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileReader;

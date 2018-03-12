@@ -5,6 +5,7 @@
 package roguelikeengine.item;
 
 import java.util.*;
+import roguelikeengine.area.AreaLocation;
 import roguelikeengine.area.Location;
 import roguelikeengine.display.DisplayChar;
 import roguelikeengine.display.RoguelikeInterface;
@@ -16,7 +17,7 @@ import stat.StatContainer;
  *
  * @author Greg
  */
-public abstract class Item {
+public class Item {
     protected ArrayList<ItemMod> mods;
     protected ArrayList<Attack> attacks;
     private Location location;
@@ -50,8 +51,6 @@ public abstract class Item {
         return null;
     }
     
-    public abstract boolean containsPart(String s);
-    
     public ArrayList<Attack> getAttacks() {
         ArrayList<Attack> attackListing = new ArrayList<>();
         for (Attack a : attacks) {
@@ -73,7 +72,10 @@ public abstract class Item {
         itemDef.useScript.run(display, this, b);
     }
     
-    public abstract boolean takeAttack(Attack A);
+    public boolean takeAttack(Attack attack) {
+        stats.getStat("HP").modify("Damage", -attack.stats.getScore("Damage"));
+        return (stats.getScore("HP") <= 0);
+    }
     
     public void refactor() {
         stats.refactor();
@@ -93,7 +95,16 @@ public abstract class Item {
         return this;
     }
     
-    public abstract void destroy();
+    public void destroy() {
+        Location location = getLocation();
+        if (location instanceof AreaLocation) {
+            AreaLocation areaLocation = (AreaLocation) location;
+            areaLocation.getArea().removeItem(this);
+        } else if (location instanceof ItemLocation) {
+            ItemLocation itemLocation = (ItemLocation) location;
+            itemLocation.getContainer().removePart(this);
+        }
+    }
 
     /**
      * @return the location
@@ -109,4 +120,7 @@ public abstract class Item {
         this.location = location;
     }
     
+    public boolean containsPart(String s) {
+        return false;
+    }
 }
