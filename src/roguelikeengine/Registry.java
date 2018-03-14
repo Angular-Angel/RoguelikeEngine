@@ -22,6 +22,7 @@ import org.json.simple.parser.ParseException;
 import roguelikeengine.area.TerrainDefinition;
 import roguelikeengine.display.DisplayChar;
 import roguelikeengine.item.DamageScript;
+import roguelikeengine.item.EquipmentSlot;
 import roguelikeengine.largeobjects.BiologyScript;
 import roguelikeengine.largeobjects.CreatureDefinition;
 import roguelikeengine.largeobjects.MeleeAttack;
@@ -125,6 +126,21 @@ public class Registry extends RawReader {
                         String attackName = (String) attack.get(0);
                         StatContainer  attackStats = readJSONStats((JSONArray) attack.get(1));
                         itemdef.addAttack(new MeleeAttack(attackName, attackStats));
+                    }
+                    
+                    if (m.containsKey("equipment")) {
+                        JSONArray equipmentSlots = (JSONArray) m.get("equipment");
+                        for (Object o : equipmentSlots) {
+                            JSONArray equipmentSlot = (JSONArray) o;
+                            String [] slots = new String[equipmentSlot.size()];
+                            int i = 0;
+                            for (Object obj : equipmentSlot) {
+                                String slot = (String) obj;
+                                slots[i] = slot;
+                                i++;
+                            }
+                            itemdef.equipmentSlots.add(new EquipmentSlot(slots));
+                        }
                     }
                     
                     items.put(names[0], itemdef);

@@ -18,6 +18,7 @@ public class ItemDefinition {
     public final DisplayChar symbol;
     public final String[] name;
     public final ArrayList<Attack> attacks;
+    public final ArrayList<EquipmentSlot> equipmentSlots;
     public final MaterialDefinition defmat;
     public final ItemScript useScript;
     public final StatContainer stats;
@@ -40,6 +41,7 @@ public class ItemDefinition {
         this.name = names;
         defmat = mat;
         attacks = new ArrayList<>();
+        equipmentSlots = new ArrayList<>();
         useScript = use;
         this.components = components;
     }
