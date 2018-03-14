@@ -6,6 +6,7 @@
 package roguelikeengine.display;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,6 +16,7 @@ public class Window {
     protected RoguelikeInterface roguelikeInterface;
     private int x, y, width, height;
     private String title;
+    public final ArrayList<WindowElement> elements;
 
     public Window(RoguelikeInterface roguelikeInterface, int width, int height) {
         this(roguelikeInterface, (roguelikeInterface.getDisplayXDist() - width)/2, (roguelikeInterface.getDisplayYDist() - height)/2, width, height);
@@ -34,6 +36,7 @@ public class Window {
 
     public Window(RoguelikeInterface roguelikeInterface, String title, int x, int y, int width, int height, boolean border) {
         this.roguelikeInterface = roguelikeInterface;
+        elements = new ArrayList<>();
         setX(x);
         setY(y);
         setWidth(width);
@@ -133,6 +136,8 @@ public class Window {
             int start = getWidth()/2 - title.length()/2;
             drawString(start, 0, title, Color.WHITE);
         }
+        
+        for (WindowElement windowElement : elements) windowElement.draw(this);
         
         roguelikeInterface.repaint();
     }

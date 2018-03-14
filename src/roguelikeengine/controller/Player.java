@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import roguelikeengine.Game;
+import roguelikeengine.display.DisplayString;
 import roguelikeengine.display.MenuOption;
 import roguelikeengine.display.MenuWindow;
 import roguelikeengine.display.ToggleWindow;
@@ -129,6 +130,8 @@ public class Player extends Controller {
             case 'g': pickUpItems();
                 break;
             case 'i': viewInventory();
+                break;
+            case 'c': viewStatus();
                 break;
             case 's': //saySpell();
                 break;
@@ -258,7 +261,11 @@ public class Player extends Controller {
     }
     
     public void viewStatus() {
-        Window win = new Window(game.display, 20, 8);
+        
+        MenuWindow menu = new MenuWindow(game.display, "Character Screen", 40, 20);
+        menu.elements.add(new DisplayString(2, 2, "" + getCreature().getBody().stats.getScore("HP"), Color.red));
+        
+        menu.loop();
     }
     
     /*public void saySpell() {
