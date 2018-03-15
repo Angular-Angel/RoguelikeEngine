@@ -6,7 +6,6 @@
 package roguelikeengine.display;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -14,7 +13,7 @@ import java.util.Arrays;
  *
  * @author angle
  */
-public class DisplayString implements WindowElement {
+public class DisplayString extends WindowElement {
     public final ArrayList<DisplayChar> displayChars;
     public int x, y;
     
@@ -29,8 +28,24 @@ public class DisplayString implements WindowElement {
         this.displayChars.addAll(Arrays.asList(displayChars));
     }
     
+    public DisplayString(int x, int y, String string) {
+        this(x, y, string, Color.white);
+    }
+    
     public DisplayString(int x, int y, String string, Color color) {
         this(x, y);
+        append(string, color);
+    }
+    
+    public void setColor(Color color) {
+        displayChars.forEach(((DisplayChar displayChar) -> displayChar.setColor(color)));
+    }
+    
+    public void append(String string) {
+        append(string, Color.white);
+    }
+    
+    public void append(String string, Color color) {
         for (char c : string.toCharArray()) {
             this.displayChars.add(new DisplayChar(c, color));
         }

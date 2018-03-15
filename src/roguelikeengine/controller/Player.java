@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import roguelikeengine.Game;
+import roguelikeengine.display.DisplayStat;
 import roguelikeengine.display.DisplayString;
 import roguelikeengine.display.MenuOption;
 import roguelikeengine.display.MenuWindow;
@@ -263,7 +264,9 @@ public class Player extends Controller {
     public void viewStatus() {
         
         MenuWindow menu = new MenuWindow(game.display, "Character Screen", 40, 20);
-        menu.elements.add(new DisplayString(2, 2, "" + getCreature().getBody().stats.getScore("HP"), Color.red));
+        menu.addElement(new DisplayStat(21, 3, getCreature().getBody().stats.getStat("Strength")));
+        menu.addElement(new DisplayStat(21, 4, getCreature().getBody().stats.getStat("Vitality")));
+        menu.addElement(new DisplayStat(21, 5, getCreature().getBody().stats.getStat("Endurance")));
         
         menu.loop();
     }

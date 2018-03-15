@@ -16,7 +16,7 @@ public class Window {
     protected RoguelikeInterface roguelikeInterface;
     private int x, y, width, height;
     private String title;
-    public final ArrayList<WindowElement> elements;
+    private final ArrayList<WindowElement> elements;
 
     public Window(RoguelikeInterface roguelikeInterface, int width, int height) {
         this(roguelikeInterface, (roguelikeInterface.getDisplayXDist() - width)/2, (roguelikeInterface.getDisplayYDist() - height)/2, width, height);
@@ -154,6 +154,12 @@ public class Window {
      */
     public void setTitle(String title) {
         this.title = title;
+    }
+    
+    public void addElement(WindowElement windowElement) {
+        windowElement.window = this;
+        elements.add(windowElement);
+        windowElement.draw(this);
     }
 
 }

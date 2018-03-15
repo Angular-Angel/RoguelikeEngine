@@ -9,6 +9,9 @@ package roguelikeengine.display;
  *
  * @author angle
  */
-public interface WindowElement {
-    public void draw(Window window);
+public abstract class WindowElement {
+    
+    public Window window;
+    
+    public abstract void draw(Window window);
 }

@@ -27,6 +27,7 @@ import roguelikeengine.largeobjects.BiologyScript;
 import roguelikeengine.largeobjects.CreatureDefinition;
 import roguelikeengine.largeobjects.MeleeAttack;
 import stat.StatContainer;
+import stat.StatDescriptor;
 import util.RawReader;
 
 /**
@@ -41,6 +42,7 @@ public class Registry extends RawReader {
     public HashMap<String, TerrainDefinition> terrainTypes;
     
     public Registry() {
+        super();
         items = new HashMap<>();
         materials = new HashMap<>();
         bodyTypes = new HashMap<>();
@@ -212,8 +214,8 @@ public class Registry extends RawReader {
     public void readJSONTerrainDefs(File file) {
         JSONParser parser = new JSONParser();
 	try {
-		JSONArray itemdefs = (JSONArray) parser.parse(new FileReader(file));
-                for (Object e : itemdefs) {
+		JSONArray terrainDefs = (JSONArray) parser.parse(new FileReader(file));
+                for (Object e : terrainDefs) {
                     JSONObject m = (JSONObject) e;
                     String name = (String) m.get("Name");
                     DisplayChar symbol = readJSONDisplayChar(m);
