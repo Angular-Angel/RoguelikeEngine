@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import roguelikeengine.Game;
 import roguelikeengine.display.DisplayStat;
+import roguelikeengine.display.DisplayString;
 import roguelikeengine.display.MenuOption;
 import roguelikeengine.display.MenuWindow;
 import roguelikeengine.display.ToggleWindow;
@@ -130,7 +131,7 @@ public class Player extends Controller {
                 break;
             case 'i': viewInventory();
                 break;
-            case 'c': viewStatus();
+            case 'c': viewCharacterStatus();
                 break;
             case 's': //saySpell();
                 break;
@@ -259,16 +260,54 @@ public class Player extends Controller {
         menu.loop();
     }
     
-    public void viewStatus() {
+    public void viewCharacterStatus() {
         
         Item body = getCreature().getBody();
         
+        int x = 21, y = 2;
+        
         MenuWindow menu = new MenuWindow(game.display, "Character Screen", 40, 20);
-        menu.addElement(new DisplayStat(21, 3, body.stats.getStat("Strength")));
-        menu.addElement(new DisplayStat(21, 4, body.stats.getStat("Vitality")));
-        menu.addElement(new DisplayStat(21, 5, body.stats.getStat("Endurance")));
+        menu.addElement(new DisplayStat(x, y++, body.stats.getStat("Strength")));
+        menu.addElement(new DisplayStat(x, y++, body.stats.getStat("Vitality")));
+        menu.addElement(new DisplayStat(x, y++, body.stats.getStat("Endurance")));
         
+        ArrayList<Item> parts = body.getParts();
+        int i = 0;
         
+        for (Item part : parts) {
+            if (!part.stats.hasStat("Internal"))
+                menu.addMenuOption(new MenuOption((char)(97 + i++), part.getName()) {
+                    @Override
+                    public void select() {
+                        viewBodyPartStatus(part);
+                    }
+                });
+        }
+        
+        menu.loop();
+    }
+    
+    public void viewBodyPartStatus(Item item) {
+        MenuWindow menu = new MenuWindow(game.display, item.getName(), 40, 20);
+        
+        ArrayList<Item> parts = item.getParts();
+        int i = 0;
+        
+        for (Item part : parts) {
+            if (!part.stats.hasStat("Internal"))
+                menu.addMenuOption(new MenuOption((char)(97 + i++), part.getName()) {
+                    @Override
+                    public void select() {
+                        viewBodyPartStatus(part);
+                    }
+                });
+        }
+        
+        int x = 21, y = 2;
+        
+        for (String stat : item.stats.getStatList()) {
+            menu.addElement(new DisplayString(x, y++, stat));
+        }
         
         menu.loop();
     }

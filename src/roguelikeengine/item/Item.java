@@ -96,7 +96,6 @@ public class Item {
     
     public boolean takeAttack(Attack attack) {
         stats.getStat("HP").modify("Damage", -attack.stats.getScore("Damage"));
-        System.out.println(stats.getScore("HP"));
         return (stats.getScore("HP") <= 0);
     }
     
