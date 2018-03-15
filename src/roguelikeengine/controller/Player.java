@@ -1,7 +1,6 @@
 package roguelikeengine.controller;
 
 import roguelikeengine.display.Rotation;
-import roguelikeengine.display.Window;
 import roguelikeengine.display.DisplayChar;
 import stat.NoSuchStatException;
 import roguelikeengine.item.Item;
@@ -18,7 +17,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import roguelikeengine.Game;
 import roguelikeengine.display.DisplayStat;
-import roguelikeengine.display.DisplayString;
 import roguelikeengine.display.MenuOption;
 import roguelikeengine.display.MenuWindow;
 import roguelikeengine.display.ToggleWindow;
@@ -263,10 +261,14 @@ public class Player extends Controller {
     
     public void viewStatus() {
         
+        Item body = getCreature().getBody();
+        
         MenuWindow menu = new MenuWindow(game.display, "Character Screen", 40, 20);
-        menu.addElement(new DisplayStat(21, 3, getCreature().getBody().stats.getStat("Strength")));
-        menu.addElement(new DisplayStat(21, 4, getCreature().getBody().stats.getStat("Vitality")));
-        menu.addElement(new DisplayStat(21, 5, getCreature().getBody().stats.getStat("Endurance")));
+        menu.addElement(new DisplayStat(21, 3, body.stats.getStat("Strength")));
+        menu.addElement(new DisplayStat(21, 4, body.stats.getStat("Vitality")));
+        menu.addElement(new DisplayStat(21, 5, body.stats.getStat("Endurance")));
+        
+        
         
         menu.loop();
     }
@@ -307,6 +309,7 @@ public class Player extends Controller {
      * is a player or not.
      * @return true;
      */
+    @Override
     public boolean isPlayer() {
         return true;
     }

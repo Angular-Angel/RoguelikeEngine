@@ -5,7 +5,6 @@ import stat.NoSuchStatException;
 import roguelikeengine.controller.DijkstraMap;
 import roguelikeengine.controller.Controller;
 import roguelikeengine.item.Item;
-import roguelikeengine.item.CompositeItem;
 import roguelikeengine.area.Location;
 import roguelikeengine.area.AreaLocation;
 import java.util.*;

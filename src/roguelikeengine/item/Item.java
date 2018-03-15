@@ -20,6 +20,7 @@ import stat.StatContainer;
 public class Item {
     protected ArrayList<ItemMod> mods;
     protected ArrayList<Attack> attacks;
+    protected ArrayList<Item> parts;
     private Location location;
     public DisplayChar symbol;
     public StatContainer stats;
@@ -31,9 +32,27 @@ public class Item {
         this.mods =  new ArrayList<>();
         this.attacks = new ArrayList<>();
         this.symbol = new DisplayChar(itemDef.symbol);
+        parts = new ArrayList<>();
+        if (itemDef.components != null)
+            for (ItemDefinition component : itemDef.components)
+                addPart(component.generateItem());
         
         stats.addAllStats(itemDef.stats.viewStats());
         addAttacks(itemDef.getAttacks());
+    }
+    
+    
+    public void addPart(Item part) {
+        parts.add(part);
+        part.setLocation(new ItemLocation(this));
+    }
+    
+    public void removePart(Item part) {
+        parts.remove(part);
+    }
+    
+    public final ArrayList<Item> getParts() {
+        return parts;
     }
     
     public void addAttack(Attack attack) {
@@ -51,10 +70,13 @@ public class Item {
         return null;
     }
     
-    public ArrayList<Attack> getAttacks() {
+    public  ArrayList<Attack> getAttacks() {
         ArrayList<Attack> attackListing = new ArrayList<>();
         for (Attack a : attacks) {
             attackListing.add(a);
+        }
+        for (Item i : parts) {
+            attackListing.addAll(i.getAttacks());
         }
         return attackListing;
     }
@@ -74,10 +96,12 @@ public class Item {
     
     public boolean takeAttack(Attack attack) {
         stats.getStat("HP").modify("Damage", -attack.stats.getScore("Damage"));
+        System.out.println(stats.getScore("HP"));
         return (stats.getScore("HP") <= 0);
     }
     
     public void refactor() {
+        for (Item i : parts) i.refactor();
         stats.refactor();
         /*for (ItemMod i : mods) {
             for (String s : i.viewStats().keySet()) { 
@@ -96,12 +120,17 @@ public class Item {
     }
     
     public void destroy() {
-        Location location = getLocation();
         if (location instanceof AreaLocation) {
             AreaLocation areaLocation = (AreaLocation) location;
+            for (Item part : parts) {
+                areaLocation.getArea().addEntity(new ItemOnGround(part, areaLocation));
+            }
             areaLocation.getArea().removeItem(this);
         } else if (location instanceof ItemLocation) {
             ItemLocation itemLocation = (ItemLocation) location;
+            for (Item part : parts) {
+                itemLocation.getContainer().addPart(part);
+            }
             itemLocation.getContainer().removePart(this);
         }
     }
@@ -121,6 +150,11 @@ public class Item {
     }
     
     public boolean containsPart(String s) {
+        if (getName().equals(s)) return true;
+        for (Item i : getParts()) {
+            if (i.containsPart(s))
+                return true;
+        }
         return false;
     }
 }

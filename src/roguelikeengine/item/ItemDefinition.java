@@ -57,11 +57,7 @@ public class ItemDefinition {
     }
     
     public Item generateItem() {
-        if (components != null) {
-            return new CompositeItem(this);
-        } else if(defmat != null)
-            return new MaterialItem(defmat, this);
-        else return new Item(this);
+        return new Item(this);
     }
     
     public void addAttack(Attack attack) {

@@ -4,77 +4,78 @@
  */
 package roguelikeengine.stat;
 
-import experimental.Stat;
+import stat.Stat;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import roguelikeengine.item.CompositeItem;
 import roguelikeengine.item.Item;
-import roguelikeengine.largeobjects.Creature;
-import stat.NoSuchStatException;
+import stat.StatContainer;
+import stat.StatDescriptor;
 
 /**
  *
  * @author Greg
  */
-public class AggregateStat implements Stat {
-    private CompositeItem i;
-    private String s1;
-    private float score;
-    private int type;
-    public static final int SUM = 1, LOWEST = 2, HIGHEST = 3, AVERAGE = 4;
-    
-    public AggregateStat(String s1, int type) {
-        this.s1 = s1;
-        this.type = type;
-    }
-    
-    public AggregateStat(CompositeItem i, String s1, int type) {
-        this.i = i;
-        this.s1 = s1;
-        this.type = type;
+public class AggregateStat extends Stat {
+    private Item item;
+    private String statName; //What stat this is an aggregate of.
+    private Type type;
+
+    public AggregateStat(Item i, StatDescriptor statDescriptor) {
+        super(statDescriptor);
+        this.item = i;
+        statName = statDescriptor.identifier;
+        type = Type.SUM;
     }
 
-    public void refactor() {
-        score = 0;
+    @Override
+    protected float refactorBase() {
+        float newScore = 0;
         int num = 0;
-        try {
-            ArrayList<Item> parts = i.getParts();
-            if (type == LOWEST) score = parts.get(0).stats.getScore(s1);
-            for (Item i : parts) {
-                switch(type) {
-                    case AVERAGE: 
-                        num++;
-                    case SUM: score += i.stats.getScore(s1);
-                        break;
-                    case HIGHEST: 
-                        if (score < i.stats.getScore(s1)) {
-                            score = i.stats.getScore(s1);
-                        }
-                        break;
-                    case LOWEST:
-                        if (score > i.stats.getScore(s1)) {
-                            score = i.stats.getScore(s1);
-                        }
-                        break;
-                }
+        ArrayList<Item> parts = item.getParts();
+        if (type == Type.LOWEST) newScore = parts.get(0).stats.getScore(statName);
+        for (Item i : parts) {
+            switch(type) {
+                case AVERAGE: 
+                    num++;
+                case SUM: newScore += i.stats.getScore(statName);
+                    break;
+                case HIGHEST: 
+                    if (newScore < i.stats.getScore(statName)) {
+                        newScore = i.stats.getScore(statName);
+                    }
+                    break;
+                case LOWEST:
+                    if (newScore > i.stats.getScore(statName)) {
+                        newScore = i.stats.getScore(statName);
+                    }
+                    break;
             }
-            if (type == AVERAGE) score /= num;
-        } catch(NoSuchStatException | NullPointerException ex) {
-            Logger.getLogger(Creature.class.getName()).log(Level.SEVERE, null, ex);
         }
+        if (type == Type.AVERAGE) newScore /= num;
+        return newScore;
+    }
+    
+    @Override
+    public void setContainer(StatContainer i) {
     }
 
     @Override
-    public List<String> getDependencies() {
+    public void set(Object obj) {
+        if (obj instanceof String)
+            statName = (String) obj;
+        else if (obj instanceof Item)
+            item = (Item) obj;
+    }
+
+    @Override
+    public void modifyBase(float change) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public float update() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Stat copy() {
+        return new AggregateStat(item, getStatDescriptor());
     }
-    
-    
+    private enum Type {
+        SUM, LOWEST, HIGHEST, AVERAGE
+    }
 }

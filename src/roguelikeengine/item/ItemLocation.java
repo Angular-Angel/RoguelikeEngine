@@ -12,9 +12,9 @@ import roguelikeengine.largeobjects.Creature;
  * @author greg
  */
 public class ItemLocation extends Location {
-    private CompositeItem container;
+    private Item container;
     
-    public ItemLocation(CompositeItem container) {
+    public ItemLocation(Item container) {
         this.container = container;
     }
 
@@ -28,7 +28,7 @@ public class ItemLocation extends Location {
     @Override
     protected boolean refactor() {return true;}
     
-    public CompositeItem getContainer() {
+    public Item getContainer() {
         return container;
     }
 
