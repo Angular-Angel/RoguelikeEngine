@@ -12,11 +12,11 @@ package roguelikeengine.largeobjects;
  */
 public interface BiologyScript {
     
-    public boolean isAlive(Creature b);
+    public boolean isAlive(Body b);
     
-    public void step(Creature b);
+    public void step(Body b);
     
-    public void beAttacked(Creature b, Attack a);
+    public void beAttacked(Body b, Attack a);
     
     public void die();
 

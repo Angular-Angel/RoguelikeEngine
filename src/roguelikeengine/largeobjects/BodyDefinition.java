@@ -9,14 +9,14 @@ import roguelikeengine.item.ItemDefinition;
  *
  * @author greg
  */
-public class CreatureDefinition{
+public class BodyDefinition{
     public final String name;
     public final DisplayChar symbol;
     public final BiologyScript bioScript;
     public final ItemDefinition bodyTemplate;
     public StatContainer stats;
     
-    public CreatureDefinition(String name, DisplayChar d, StatContainer stats, BiologyScript script, ItemDefinition bodyTemplate) {
+    public BodyDefinition(String name, DisplayChar d, StatContainer stats, BiologyScript script, ItemDefinition bodyTemplate) {
         this.stats = new StatContainer();
         this.stats.addAllStats(stats);
         this.name = name;
@@ -26,8 +26,8 @@ public class CreatureDefinition{
         
     }
     
-    public Creature getCreature(AreaLocation location) {
-        return new Creature(location, this);
+    public Body getCreature(AreaLocation location) {
+        return new Body(location, this);
     }
     
     /**

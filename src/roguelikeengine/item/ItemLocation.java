@@ -5,7 +5,7 @@ import roguelikeengine.area.Location;
 import roguelikeengine.area.NonexistentLocationException;
 import roguelikeengine.area.TerrainDefinition;
 import roguelikeengine.display.DisplayChar;
-import roguelikeengine.largeobjects.Creature;
+import roguelikeengine.largeobjects.Body;
 
 /**
  *
@@ -67,7 +67,7 @@ public class ItemLocation extends Location {
         return container.symbol;}
 
     @Override
-    public Creature bodyAt() {
+    public Body bodyAt() {
         return container.getLocation().bodyAt();
     }
 

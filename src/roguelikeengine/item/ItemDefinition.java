@@ -18,7 +18,7 @@ public class ItemDefinition {
     public final DisplayChar symbol;
     public final String[] name;
     public final ArrayList<Attack> attacks;
-    public final ArrayList<EquipmentSlot> equipmentSlots;
+    public final ArrayList<EquipmentProfile> equipmentSlots;
     public final MaterialDefinition defmat;
     public final ItemScript useScript;
     public final StatContainer stats;

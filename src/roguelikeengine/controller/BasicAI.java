@@ -5,7 +5,7 @@
  */
 package roguelikeengine.controller;
 
-import roguelikeengine.largeobjects.Creature;
+import roguelikeengine.largeobjects.Body;
 
 /**
  *
@@ -13,7 +13,7 @@ import roguelikeengine.largeobjects.Creature;
  */
 public class BasicAI extends Controller {
 
-    public BasicAI(Creature body) {
+    public BasicAI(Body body) {
         super(body);
     }
     

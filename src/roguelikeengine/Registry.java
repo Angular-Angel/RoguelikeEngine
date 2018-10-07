@@ -22,12 +22,11 @@ import org.json.simple.parser.ParseException;
 import roguelikeengine.area.TerrainDefinition;
 import roguelikeengine.display.DisplayChar;
 import roguelikeengine.item.DamageScript;
-import roguelikeengine.item.EquipmentSlot;
+import roguelikeengine.item.EquipmentProfile;
 import roguelikeengine.largeobjects.BiologyScript;
-import roguelikeengine.largeobjects.CreatureDefinition;
+import roguelikeengine.largeobjects.BodyDefinition;
 import roguelikeengine.largeobjects.MeleeAttack;
 import stat.StatContainer;
-import stat.StatDescriptor;
 import util.RawReader;
 
 /**
@@ -38,7 +37,7 @@ public class Registry extends RawReader {
     
     public HashMap<String, MaterialDefinition> materials;
     public HashMap<String, ItemDefinition> items;
-    public HashMap<String, CreatureDefinition> bodyTypes;
+    public HashMap<String, BodyDefinition> bodyTypes;
     public HashMap<String, TerrainDefinition> terrainTypes;
     
     public Registry() {
@@ -49,23 +48,26 @@ public class Registry extends RawReader {
         terrainTypes =  new HashMap<>();
     }
     
+    public MaterialDefinition readJSONMaterial(JSONObject m) {
+    	String name = (String) m.get("name");
+        Color c = readJSONColor((JSONArray) m.get("color"));
+        
+        StatContainer stats = readJSONStats((JSONArray) m.get("stats"));
+        
+        String scriptFile = (String) m.get("script");
+        
+        MaterialDefinition mat = new MaterialDefinition(name, c, stats, 
+        (DamageScript) readGroovyScript(new File(scriptFile)));
+        return mat;
+    }
+    
     public void readJSONMaterials(File file) {
         JSONParser parser = new JSONParser();
 	try {
 		JSONArray matdefs = (JSONArray) parser.parse(new FileReader(file));
                 for (Object e : matdefs) {
-                    JSONObject m = (JSONObject) e;
-                    String name = (String) m.get("name");
-                    Color c = readJSONColor((JSONArray) m.get("color"));
-                    
-                    StatContainer stats = readJSONStats((JSONArray) m.get("stats"));
-                    
-                    String scriptFile = (String) m.get("script");
-                    
-                    MaterialDefinition mat = new MaterialDefinition(name, c, stats, 
-                    (DamageScript) readGroovyScript(new File(scriptFile)));
-                    materials.put(name, mat);
-                    
+                    MaterialDefinition mat = readJSONMaterial((JSONObject) e);
+                    materials.put(mat.getName(), mat);
                 }
  
 	} catch (IOException | ParseException e) {
@@ -80,9 +82,70 @@ public class Registry extends RawReader {
     }
     
     private DisplayChar readJSONDisplayChar(JSONArray ja) {
-         JSONArray jcolor = (JSONArray) ja.get(1);
-         return new DisplayChar(((String) ja.get(0)).charAt(0), 
-                            readJSONColor(jcolor));
+         return new DisplayChar(((String) ja.get(0)).charAt(0), readJSONColor((JSONArray) ja.get(1)));
+    }
+    
+    public String[] readJSONNames(JSONObject jsonObject) {
+    	String names[] = new String[3];
+        names[0] = (String) jsonObject.get("singular");
+        names[1] = (String) jsonObject.get("plural");
+        names[2] = (String) jsonObject.get("adjective");
+        
+        return names;
+    }
+    
+    public ItemDefinition readJSONItemDef(JSONObject jsonItem) {
+        String names[] = readJSONNames(jsonItem);
+        DisplayChar symbol = readJSONDisplayChar(jsonItem);
+        MaterialDefinition defmat;
+        if (jsonItem.containsKey("defmat"))
+        defmat = materials.get((String) jsonItem.get("defmat"));
+        else defmat = null;
+        
+        ItemDefinition[] components = null;
+        if (jsonItem.containsKey("components")) {
+            JSONArray componentsJSON = (JSONArray) jsonItem.get("components");
+            components = new ItemDefinition[componentsJSON.size()];
+            int i = 0;
+            for (Object o : componentsJSON) {
+                String component = (String) o;
+                components[i] = items.get(component);
+                i++;
+            }
+        }
+        
+        StatContainer stats = readJSONStats((JSONArray) jsonItem.get("stats"));
+        ItemDefinition itemdef;
+        if (jsonItem.containsKey("script")) {
+            ItemScript use = (ItemScript) readGroovyScript(new File((String) jsonItem.get("script")));
+            itemdef = new ItemDefinition(symbol, names, defmat, stats, use, components);
+        } else {
+            itemdef = new ItemDefinition(symbol, names, defmat, stats, null, components);
+        }
+        
+        JSONArray attacks = (JSONArray) jsonItem.get("attacks");
+        for (Object o : attacks) {
+            JSONArray attack = (JSONArray) o;
+            String attackName = (String) attack.get(0);
+            StatContainer  attackStats = readJSONStats((JSONArray) attack.get(1));
+            itemdef.addAttack(new MeleeAttack(attackName, attackStats));
+        }
+        
+        if (jsonItem.containsKey("equipment")) {
+            JSONArray equipmentSlots = (JSONArray) jsonItem.get("equipment");
+            for (Object o : equipmentSlots) {
+                JSONArray equipmentSlot = (JSONArray) o;
+                String [] slots = new String[equipmentSlot.size()];
+                int i = 0;
+                for (Object obj : equipmentSlot) {
+                    String slot = (String) obj;
+                    slots[i] = slot;
+                    i++;
+                }
+                itemdef.equipmentSlots.add(new EquipmentProfile(slots));
+            }
+        }
+        return itemdef;
     }
     
     public void readJSONItemDefs(File file) {
@@ -90,62 +153,9 @@ public class Registry extends RawReader {
 	try {
 		JSONArray itemdefs = (JSONArray) parser.parse(new FileReader(file));
                 for (Object e : itemdefs) {
-                    JSONObject m = (JSONObject) e;
-                    String names[] = new String[3];
-                    names[0] = (String) m.get("singular");
-                    names[1] = (String) m.get("plural");
-                    names[2] = (String) m.get("adjective");
-                    DisplayChar symbol = readJSONDisplayChar(m);
-                    MaterialDefinition defmat;
-                    if (m.containsKey("defmat"))
-                    defmat = materials.get((String) m.get("defmat"));
-                    else defmat = null;
+                    ItemDefinition itemdef = readJSONItemDef((JSONObject) e);
                     
-                    ItemDefinition[] components = null;
-                    if (m.containsKey("components")) {
-                        JSONArray componentsJSON = (JSONArray) m.get("components");
-                        components = new ItemDefinition[componentsJSON.size()];
-                        int i = 0;
-                        for (Object o : componentsJSON) {
-                            String component = (String) o;
-                            components[i] = items.get(component);
-                            i++;
-                        }
-                    }
-                    
-                    StatContainer stats = readJSONStats((JSONArray) m.get("stats"));
-                    ItemDefinition itemdef;
-                    if (m.containsKey("script")) {
-                        ItemScript use = (ItemScript) readGroovyScript(new File((String) m.get("script")));
-                        itemdef = new ItemDefinition(symbol, names, defmat, stats, use, components);
-                    } else {
-                        itemdef = new ItemDefinition(symbol, names, defmat, stats, null, components);
-                    }
-                    
-                    JSONArray attacks = (JSONArray) m.get("attacks");
-                    for (Object o : attacks) {
-                        JSONArray attack = (JSONArray) o;
-                        String attackName = (String) attack.get(0);
-                        StatContainer  attackStats = readJSONStats((JSONArray) attack.get(1));
-                        itemdef.addAttack(new MeleeAttack(attackName, attackStats));
-                    }
-                    
-                    if (m.containsKey("equipment")) {
-                        JSONArray equipmentSlots = (JSONArray) m.get("equipment");
-                        for (Object o : equipmentSlots) {
-                            JSONArray equipmentSlot = (JSONArray) o;
-                            String [] slots = new String[equipmentSlot.size()];
-                            int i = 0;
-                            for (Object obj : equipmentSlot) {
-                                String slot = (String) obj;
-                                slots[i] = slot;
-                                i++;
-                            }
-                            itemdef.equipmentSlots.add(new EquipmentSlot(slots));
-                        }
-                    }
-                    
-                    items.put(names[0], itemdef);
+                    items.put(itemdef.getName(0), itemdef);
                 }
  
 	} catch (IOException | ParseException e) {
@@ -184,26 +194,32 @@ public class Registry extends RawReader {
 //        return null;
 //    }
     
+    public BodyDefinition readJSONBodyDef(JSONObject m) {
+    	String name = (String) m.get("name");
+        
+        DisplayChar d = readJSONDisplayChar(m);
+        
+        StatContainer stats = readJSONStats((JSONArray) m.get("stats"));
+        
+        BodyDefinition bodydef;
+        BiologyScript script = (BiologyScript) readGroovyScript(new File((String) m.get("script")));
+        if (m.containsKey("bodytemplate")) {
+            ItemDefinition bodyTemplate = items.get((String) m.get("bodytemplate"));
+            bodydef = new BodyDefinition(name, d, stats, script, bodyTemplate);
+        } else bodydef = new BodyDefinition(name, d, stats, script, null);
+        return bodydef;
+    }
+    
     public void readJSONBodyDefs(File file) {
         JSONParser parser = new JSONParser();
 	try {
 		JSONArray itemdefs = (JSONArray) parser.parse(new FileReader(file));
                 for (Object e : itemdefs) {
-                    JSONObject m = (JSONObject) e;
-                    String name = (String) m.get("name");
                     
-                    DisplayChar d = readJSONDisplayChar(m);
                     
-                    StatContainer stats = readJSONStats((JSONArray) m.get("stats"));
+                    BodyDefinition bodydef = readJSONBodyDef((JSONObject) e);
                     
-                    CreatureDefinition bodydef;
-                    BiologyScript script = (BiologyScript) readGroovyScript(new File((String) m.get("script")));
-                    if (m.containsKey("bodytemplate")) {
-                        ItemDefinition bodyTemplate = items.get((String) m.get("bodytemplate"));
-                        bodydef = new CreatureDefinition(name, d, stats, script, bodyTemplate);
-                    } else bodydef = new CreatureDefinition(name, d, stats, script, null);
-                    
-                    bodyTypes.put(name, bodydef);
+                    bodyTypes.put(bodydef.getName(), bodydef);
                 }
  
 	} catch (IOException | ParseException e) {
@@ -211,22 +227,26 @@ public class Registry extends RawReader {
 	} 
     }
     
+    public TerrainDefinition readJSONTerrainDef(JSONObject m) {
+    	String name = (String) m.get("Name");
+        DisplayChar symbol = readJSONDisplayChar(m);
+        MaterialDefinition mat;
+        mat = materials.get((String) m.get("Material"));
+        
+        StatContainer stats = readJSONStats((JSONArray) m.get("Stats"));
+        
+        TerrainDefinition terrain = new TerrainDefinition(name, symbol, mat, stats);
+        
+        return terrain;
+    }
+    
     public void readJSONTerrainDefs(File file) {
         JSONParser parser = new JSONParser();
 	try {
 		JSONArray terrainDefs = (JSONArray) parser.parse(new FileReader(file));
                 for (Object e : terrainDefs) {
-                    JSONObject m = (JSONObject) e;
-                    String name = (String) m.get("Name");
-                    DisplayChar symbol = readJSONDisplayChar(m);
-                    MaterialDefinition mat;
-                    mat = materials.get((String) m.get("Material"));
-                    
-                    StatContainer stats = readJSONStats((JSONArray) m.get("Stats"));
-                    
-                    TerrainDefinition terrain = new TerrainDefinition(symbol, mat, stats);
-                    
-                    terrainTypes.put(name, terrain);
+                    TerrainDefinition terrain = readJSONTerrainDef((JSONObject) e);
+                    terrainTypes.put(terrain.getName(), terrain);
                 }
  
 	} catch (IOException | ParseException e) {

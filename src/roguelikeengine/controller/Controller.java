@@ -2,14 +2,14 @@ package roguelikeengine.controller;
 
 import roguelikeengine.Game;
 import roguelikeengine.largeobjects.Actor;
-import roguelikeengine.largeobjects.Creature;
+import roguelikeengine.largeobjects.Body;
 
 /**
  *
  * @author greg
  */
 public abstract class Controller implements Actor {
-    private Creature body;
+    private Body body;
     private Game game;
     
     public Controller() {
@@ -22,20 +22,20 @@ public abstract class Controller implements Actor {
      * Constructor
      * @param body The body that this controls.
      */
-    public Controller(Creature body) {
+    public Controller(Body body) {
         setBody(body);
     }
     /**
      * @return the body
      */
-    public Creature getCreature() {
+    public Body getCreature() {
         return body;
     }
 
     /**
      * @param body the body to set
      */
-    public void setBody(Creature body) {
+    public void setBody(Body body) {
         this.body = body;
         body.setController(this);
     }

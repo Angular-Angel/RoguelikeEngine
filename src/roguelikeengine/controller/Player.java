@@ -33,7 +33,7 @@ public class Player extends Controller {
     private final Game game;
     private Rotation rot;
     
-    public Player(Creature body, Game game) {
+    public Player(Body body, Game game) {
         super(body);
         
         rot = Rotation.degree0;
@@ -156,7 +156,7 @@ public class Player extends Controller {
         
     }
     
-    public void bodyInteraction(Creature body) {
+    public void bodyInteraction(Body body) {
         MenuWindow menu = new MenuWindow(game.display, 40, 20);
         menu.addMenuOption(new MenuOption('a', "Unarmed") {
             @Override
@@ -178,7 +178,7 @@ public class Player extends Controller {
         menu.loop();
     }
     
-    public void attackMenu(Item item, Creature creature) {
+    public void attackMenu(Item item, Body body) {
         MenuWindow menu = new MenuWindow(game.display, item.getName(), 40, 20);
         ArrayList<Attack> attacks = item.getAttacks();
         
@@ -187,7 +187,7 @@ public class Player extends Controller {
             menu.addMenuOption(new MenuOption((char)(97 + i), attack.name) {
                 @Override
                 public void select() {
-                    getCreature().attack(creature, attack);
+                    getCreature().attack(body, attack);
                     menu.end();
                 }
             });
@@ -241,7 +241,7 @@ public class Player extends Controller {
     
     public void viewItem(Item i) {
         MenuWindow menu = new MenuWindow(game.display, i.getName(), 20, 10);
-        Creature body = getCreature();
+        Body body = getCreature();
         menu.addMenuOption(new MenuOption('d', "Drop") {
             @Override
             public void select() {
@@ -260,37 +260,8 @@ public class Player extends Controller {
         menu.loop();
     }
     
-    public void viewCharacterStatus() {
-        
-        Item body = getCreature().getBody();
-        
-        int x = 21, y = 2;
-        
-        MenuWindow menu = new MenuWindow(game.display, "Character Screen", 40, 20);
-        menu.addElement(new DisplayStat(x, y++, body.stats.getStat("Strength")));
-        menu.addElement(new DisplayStat(x, y++, body.stats.getStat("Vitality")));
-        menu.addElement(new DisplayStat(x, y++, body.stats.getStat("Endurance")));
-        
-        ArrayList<Item> parts = body.getParts();
-        int i = 0;
-        
-        for (Item part : parts) {
-            if (!part.stats.hasStat("Internal"))
-                menu.addMenuOption(new MenuOption((char)(97 + i++), part.getName()) {
-                    @Override
-                    public void select() {
-                        viewBodyPartStatus(part);
-                    }
-                });
-        }
-        
-        menu.loop();
-    }
-    
-    public void viewBodyPartStatus(Item item) {
-        MenuWindow menu = new MenuWindow(game.display, item.getName(), 40, 20);
-        
-        ArrayList<Item> parts = item.getParts();
+    public void drawItemDescription(Item item, MenuWindow menu) {
+    	ArrayList<Item> parts = item.getParts();
         int i = 0;
         
         for (Item part : parts) {
@@ -308,6 +279,23 @@ public class Player extends Controller {
         for (String stat : item.stats.getStatList()) {
             menu.addElement(new DisplayString(x, y++, stat));
         }
+    }
+    
+    public void viewCharacterStatus() {
+        
+        Item body = getCreature().getBody();
+        
+        MenuWindow menu = new MenuWindow(game.display, "Character Screen", 40, 20);
+       
+        drawItemDescription(body, menu);
+        
+        menu.loop();
+    }
+    
+    public void viewBodyPartStatus(Item item) {
+        MenuWindow menu = new MenuWindow(game.display, item.getName(), 40, 20);
+        
+        drawItemDescription(item, menu);
         
         menu.loop();
     }

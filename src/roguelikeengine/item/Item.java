@@ -10,7 +10,7 @@ import roguelikeengine.area.Location;
 import roguelikeengine.display.DisplayChar;
 import roguelikeengine.display.RoguelikeInterface;
 import roguelikeengine.largeobjects.Attack;
-import roguelikeengine.largeobjects.Creature;
+import roguelikeengine.largeobjects.Body;
 import stat.StatContainer;
 
 /**
@@ -90,11 +90,12 @@ public class Item {
         return name;
     }
     
-    public void use(RoguelikeInterface display, Creature b) {
+    public void use(RoguelikeInterface display, Body b) {
         itemDef.useScript.run(display, this, b);
     }
     
     public boolean takeAttack(Attack attack) {
+        System.out.println(stats.getScore("HP") + ", " + attack.stats.getScore("Damage"));
         stats.getStat("HP").modify("Damage", -attack.stats.getScore("Damage"));
         return (stats.getScore("HP") <= 0);
     }

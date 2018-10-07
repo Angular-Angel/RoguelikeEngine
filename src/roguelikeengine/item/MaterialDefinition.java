@@ -14,9 +14,9 @@ import java.util.HashMap;
  * @author Greg
  */
 public class MaterialDefinition {
-    private String name;
-    private Color color;
-    private DamageScript damageScript;
+	public final String name;
+	public final Color color;
+	public final DamageScript damageScript;
     public StatContainer stats;
     
 

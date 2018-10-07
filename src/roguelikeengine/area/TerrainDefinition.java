@@ -14,15 +14,16 @@ import stat.StatContainer;
  * @author greg
  */
 public class TerrainDefinition {
-    private DisplayChar displayChar;
-    private MaterialDefinition material;
+	public final DisplayChar displayChar;
+    public final MaterialDefinition material;
     private StatContainer stats;
+    public final String name;
     
     /**
      * The default constructor.
      */
     public TerrainDefinition() {
-        this('%', Color.white, null, new StatContainer());
+        this("Null Terrain", '%', Color.white, null, new StatContainer());
     }
     
     /**
@@ -31,11 +32,12 @@ public class TerrainDefinition {
      * @param color The color.
      * @param mat the material this Terrain is made out of.
      */
-    public TerrainDefinition(char symbol, Color color, MaterialDefinition mat, StatContainer stats) {
-        this(new DisplayChar(symbol, color), mat, stats);
+    public TerrainDefinition(String name, char symbol, Color color, MaterialDefinition mat, StatContainer stats) {
+        this(name, new DisplayChar(symbol, color), mat, stats);
     }
     
-    public TerrainDefinition(DisplayChar symbol, MaterialDefinition mat, StatContainer stats) {
+    public TerrainDefinition(String name, DisplayChar symbol, MaterialDefinition mat, StatContainer stats) {
+    	this.name = name;
         this.stats = new StatContainer();
         this.stats.addAllStats(stats);
         displayChar = symbol;
@@ -83,4 +85,8 @@ public class TerrainDefinition {
     public MaterialDefinition getMaterial() {
         return material;
     }
+
+	public String getName() {
+		return name;
+	}
 }

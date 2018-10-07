@@ -7,7 +7,7 @@
 package roguelikeengine.item;
 
 import roguelikeengine.display.RoguelikeInterface;
-import roguelikeengine.largeobjects.Creature;
+import roguelikeengine.largeobjects.Body;
 
 /**
  *
@@ -15,6 +15,6 @@ import roguelikeengine.largeobjects.Creature;
  */
 public interface ItemScript {
     
-    public void run(RoguelikeInterface display, Item i, Creature b);
+    public void run(RoguelikeInterface display, Item i, Body b);
     
 }

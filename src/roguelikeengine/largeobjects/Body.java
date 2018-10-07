@@ -15,22 +15,23 @@ import stat.NumericStat;
  *
  * @author greg
  */
-public class Creature implements Entity {
+public class Body implements Entity {
     private String name;
     private Controller controller;
-    private CreatureDefinition def;
+    private BodyDefinition def;
     private ArrayList<Item> inventory;
     private DijkstraMap map;
     private int moves;
     private ArrayList<StatusEffect> effects;
+    private HashMap<Item, Item> equipment;
     private Item weapon;
     private Item body;
     
-    public Creature(AreaLocation location, CreatureDefinition bodyDef) {
-        this("", location, bodyDef);
+    public Body(AreaLocation location, BodyDefinition bodyDef) {
+        this("Null Body", location, bodyDef);
     }
 
-    public Creature(String name, AreaLocation location, CreatureDefinition bodyDef) {
+    public Body(String name, AreaLocation location, BodyDefinition bodyDef) {
         this.def = bodyDef;
         this.name = name;
         body = def.bodyTemplate.generateItem();
@@ -102,7 +103,7 @@ public class Creature implements Entity {
     /**
      * @return the BodyDefinition
      */
-    public CreatureDefinition getDef() {
+    public BodyDefinition getDef() {
         return def;
     }
     
@@ -179,7 +180,7 @@ public class Creature implements Entity {
         effects.add(effect);
     }
     
-    public void attack(Creature body, Attack attack) {
+    public void attack(Body body, Attack attack) {
         addMoves(-100);
         body.beAttacked(attack);
     }
@@ -230,15 +231,15 @@ public class Creature implements Entity {
     }
 
     private void die() {
-        DisplayChar symbol = body.symbol;
-        symbol.setColor(Color.RED);
-        body.symbol = symbol;
+        body.symbol.setBackground(Color.RED);
         
         AreaLocation location = getLocation();
         location.getArea().addItem(body, location.getX(), location.getY());
         location.getArea().removeEntity(this);
     }
     
-    
+    public void equip(Item Item, Item bodyPart) {
+        equipment.put(bodyPart, Item);
+    }
     
 }

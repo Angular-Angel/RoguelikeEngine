@@ -29,11 +29,11 @@ public class DisplayChar {
     public DisplayChar(char symbol, Color color, Color bgColor){
         setSymbol(symbol);
         setColor(color);
-        setBgColor(bgColor);
+        setBackground(bgColor);
     }
 
     public DisplayChar(DisplayChar symbol) {
-        this(symbol.getSymbol(), symbol.getColor(), symbol.getBgColor());
+        this(symbol.getSymbol(), symbol.getColor(), symbol.getBackground());
     }
 
     /**
@@ -65,10 +65,10 @@ public class DisplayChar {
     }
     
     public void draw(Graphics g, FontMetrics metrics, int x, int y) {
-        if(getBgColor() != Color.black) {
-            g.setColor(getBgColor());
+        if(getBackground() != Color.black) {
+            g.setColor(getBackground());
             g.fillRect(x * metrics.getMaxAdvance() + 2, y * metrics.getHeight() + 2,
-                      (x + 1) * metrics.getMaxAdvance(), (y + 1) * metrics.getHeight());
+                       metrics.getMaxAdvance(), metrics.getHeight());
         }
         g.setColor(getColor());
         g.drawString("" + getSymbol(), x * metrics.getMaxAdvance() + 2, (y +1) * metrics.getHeight());
@@ -77,14 +77,14 @@ public class DisplayChar {
     /**
      * @return the bgColor
      */
-    public Color getBgColor() {
+    public Color getBackground() {
         return bgColor;
     }
 
     /**
      * @param bgColor the bgColor to set
      */
-    public void setBgColor(Color bgColor) {
+    public void setBackground(Color bgColor) {
         this.bgColor = bgColor;
     }
 }

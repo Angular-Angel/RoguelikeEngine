@@ -4,7 +4,7 @@
  */
 package roguelikeengine.controller;
 
-import roguelikeengine.largeobjects.Creature;
+import roguelikeengine.largeobjects.Body;
 import roguelikeengine.area.*;
 
 /**
@@ -12,5 +12,5 @@ import roguelikeengine.area.*;
  * @author greg
  */
 public interface AIGoal {
-    public boolean takeAction(Creature b);
+    public boolean takeAction(Body b);
 }

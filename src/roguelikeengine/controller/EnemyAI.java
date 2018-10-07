@@ -8,7 +8,7 @@ import roguelikeengine.area.LocationLine;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import roguelikeengine.largeobjects.Creature;
+import roguelikeengine.largeobjects.Body;
 import stat.NoSuchStatException;
 
 /**
@@ -19,7 +19,7 @@ public class EnemyAI extends Controller{
 
     private AIGoal target;
     
-    public EnemyAI(Creature body) {
+    public EnemyAI(Body body) {
         super(body);
         target = null;
     }
@@ -65,7 +65,7 @@ public class EnemyAI extends Controller{
     
     public ArrayList<Target> visionLine(LocationLine line) {
         ArrayList<Target> targets = new ArrayList<Target>();
-        Creature b;
+        Body b;
         for (int i = 0; i < line.getLength(); i++) {
             b = line.getLocation(i).getArea().bodyAt(i, i);
             if (b != null && b != getCreature()) {
