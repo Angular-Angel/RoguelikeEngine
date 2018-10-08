@@ -6,7 +6,7 @@ package roguelikeengine;
 
 import roguelikeengine.item.MaterialItem;
 import roguelikeengine.item.ItemDefinition;
-import roguelikeengine.item.ItemScript;
+import roguelikeengine.item.ItemUseScript;
 import roguelikeengine.item.MaterialDefinition;
 import java.awt.Color;
 import java.io.File;
@@ -117,7 +117,7 @@ public class Registry extends RawReader {
         StatContainer stats = readJSONStats((JSONArray) jsonItem.get("stats"));
         ItemDefinition itemdef;
         if (jsonItem.containsKey("script")) {
-            ItemScript use = (ItemScript) readGroovyScript(new File((String) jsonItem.get("script")));
+            ItemUseScript use = (ItemUseScript) readGroovyScript(new File((String) jsonItem.get("script")));
             itemdef = new ItemDefinition(symbol, names, defmat, stats, use, components);
         } else {
             itemdef = new ItemDefinition(symbol, names, defmat, stats, null, components);
@@ -175,7 +175,7 @@ public class Registry extends RawReader {
 //        StatContainer stats = readJSONStats((JSONArray) item.get(2));
 //        CompositeItem ret;
 //        if (item.size() == 5) {
-//            ItemScript use = (ItemScript) readGroovyScript(new File((String) item.get(4)));
+//            ItemUseScript use = (ItemUseScript) readGroovyScript(new File((String) item.get(4)));
 //            ret = new CompositeItem(name, display, stats, use);
 //        } else {
 //            ret = new CompositeItem(name, display, stats, null);

@@ -1,14 +1,15 @@
 package roguelikeengine.largeobjects;
 
 import java.awt.Color;
-import stat.NoSuchStatException;
-import roguelikeengine.controller.DijkstraMap;
-import roguelikeengine.controller.Controller;
-import roguelikeengine.item.Item;
-import roguelikeengine.area.Location;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import roguelikeengine.area.AreaLocation;
-import java.util.*;
-import roguelikeengine.display.DisplayChar;
+import roguelikeengine.area.Location;
+import roguelikeengine.controller.Controller;
+import roguelikeengine.controller.DijkstraMap;
+import roguelikeengine.item.Item;
+import stat.NoSuchStatException;
 import stat.NumericStat;
 
 /**

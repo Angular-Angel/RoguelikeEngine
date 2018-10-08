@@ -13,7 +13,7 @@ import roguelikeengine.largeobjects.Body;
  *
  * @author greg
  */
-public interface ItemScript {
+public interface ItemUseScript {
     
     public void run(RoguelikeInterface display, Item i, Body b);
     

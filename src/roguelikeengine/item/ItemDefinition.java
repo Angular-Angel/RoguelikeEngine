@@ -20,7 +20,7 @@ public class ItemDefinition {
     public final ArrayList<Attack> attacks;
     public final ArrayList<EquipmentProfile> equipmentSlots;
     public final MaterialDefinition defmat;
-    public final ItemScript useScript;
+    public final ItemUseScript useScript;
     public final StatContainer stats;
     public final ItemDefinition[] components;
     
@@ -29,12 +29,12 @@ public class ItemDefinition {
     }
     
     public ItemDefinition(DisplayChar d, String[] names, MaterialDefinition mat, 
-            StatContainer stats, ItemScript use) {
+            StatContainer stats, ItemUseScript use) {
         this(d, names, mat, stats, use, null);
     }
     
     public ItemDefinition(DisplayChar d, String[] names, MaterialDefinition mat, 
-            StatContainer stats, ItemScript use, ItemDefinition[] components) {
+            StatContainer stats, ItemUseScript use, ItemDefinition[] components) {
         this.stats = new StatContainer();
         this.stats.addAllStats(stats);
         this.symbol = d;
@@ -89,7 +89,7 @@ public class ItemDefinition {
     /**
      * @return the useScript
      */
-    public ItemScript getUseScript() {
+    public ItemUseScript getUseScript() {
         return useScript;
     }
 }

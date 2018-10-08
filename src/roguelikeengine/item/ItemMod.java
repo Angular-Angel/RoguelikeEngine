@@ -4,8 +4,6 @@
  */
 package roguelikeengine.item;
 
-import java.util.HashMap;
-import stat.Stat;
 import stat.StatContainer;
 
 /**
