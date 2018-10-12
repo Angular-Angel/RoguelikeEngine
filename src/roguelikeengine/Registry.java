@@ -7,7 +7,7 @@ package roguelikeengine;
 import roguelikeengine.item.MaterialItem;
 import roguelikeengine.item.ItemDefinition;
 import roguelikeengine.item.ItemUseScript;
-import roguelikeengine.item.MaterialDefinition;
+import roguelikeengine.item.Material;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileReader;
@@ -35,7 +35,7 @@ import util.RawReader;
  */
 public class Registry extends RawReader {
     
-    public HashMap<String, MaterialDefinition> materials;
+    public HashMap<String, Material> materials;
     public HashMap<String, ItemDefinition> items;
     public HashMap<String, BodyDefinition> bodyTypes;
     public HashMap<String, TerrainDefinition> terrainTypes;
@@ -48,7 +48,7 @@ public class Registry extends RawReader {
         terrainTypes =  new HashMap<>();
     }
     
-    public MaterialDefinition readJSONMaterial(JSONObject m) {
+    public Material readJSONMaterial(JSONObject m) {
     	String name = (String) m.get("name");
         Color c = readJSONColor((JSONArray) m.get("color"));
         
@@ -56,7 +56,7 @@ public class Registry extends RawReader {
         
         String scriptFile = (String) m.get("script");
         
-        MaterialDefinition mat = new MaterialDefinition(name, c, stats, 
+        Material mat = new Material(name, c, stats, 
         (DamageScript) readGroovyScript(new File(scriptFile)));
         return mat;
     }
@@ -66,7 +66,7 @@ public class Registry extends RawReader {
 	try {
 		JSONArray matdefs = (JSONArray) parser.parse(new FileReader(file));
                 for (Object e : matdefs) {
-                    MaterialDefinition mat = readJSONMaterial((JSONObject) e);
+                    Material mat = readJSONMaterial((JSONObject) e);
                     materials.put(mat.getName(), mat);
                 }
  
@@ -97,7 +97,7 @@ public class Registry extends RawReader {
     public ItemDefinition readJSONItemDef(JSONObject jsonItem) {
         String names[] = readJSONNames(jsonItem);
         DisplayChar symbol = readJSONDisplayChar(jsonItem);
-        MaterialDefinition defmat;
+        Material defmat;
         if (jsonItem.containsKey("defmat"))
         defmat = materials.get((String) jsonItem.get("defmat"));
         else defmat = null;
@@ -164,7 +164,7 @@ public class Registry extends RawReader {
     }
     
     public MaterialItem readJSONMaterialItem(JSONArray item) {
-        MaterialDefinition matdef = materials.get((String) item.get(0));
+        Material matdef = materials.get((String) item.get(0));
         ItemDefinition itemdef = items.get((String) item.get(1));
         return new MaterialItem(matdef, itemdef);
     }
@@ -230,7 +230,7 @@ public class Registry extends RawReader {
     public TerrainDefinition readJSONTerrainDef(JSONObject m) {
     	String name = (String) m.get("Name");
         DisplayChar symbol = readJSONDisplayChar(m);
-        MaterialDefinition mat;
+        Material mat;
         mat = materials.get((String) m.get("Material"));
         
         StatContainer stats = readJSONStats((JSONArray) m.get("Stats"));

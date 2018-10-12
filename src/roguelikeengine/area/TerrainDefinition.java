@@ -6,7 +6,7 @@ package roguelikeengine.area;
 
 import java.awt.*;
 import roguelikeengine.display.DisplayChar;
-import roguelikeengine.item.MaterialDefinition;
+import roguelikeengine.item.Material;
 import stat.StatContainer;
 
 /**
@@ -15,7 +15,7 @@ import stat.StatContainer;
  */
 public class TerrainDefinition {
 	public final DisplayChar displayChar;
-    public final MaterialDefinition material;
+    public final Material material;
     private StatContainer stats;
     public final String name;
     
@@ -32,11 +32,11 @@ public class TerrainDefinition {
      * @param color The color.
      * @param mat the material this Terrain is made out of.
      */
-    public TerrainDefinition(String name, char symbol, Color color, MaterialDefinition mat, StatContainer stats) {
+    public TerrainDefinition(String name, char symbol, Color color, Material mat, StatContainer stats) {
         this(name, new DisplayChar(symbol, color), mat, stats);
     }
     
-    public TerrainDefinition(String name, DisplayChar symbol, MaterialDefinition mat, StatContainer stats) {
+    public TerrainDefinition(String name, DisplayChar symbol, Material mat, StatContainer stats) {
     	this.name = name;
         this.stats = new StatContainer();
         this.stats.addAllStats(stats);
@@ -82,7 +82,7 @@ public class TerrainDefinition {
     /**
      * @return the material
      */
-    public MaterialDefinition getMaterial() {
+    public Material getMaterial() {
         return material;
     }
 

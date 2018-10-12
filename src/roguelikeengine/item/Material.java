@@ -13,18 +13,18 @@ import java.util.HashMap;
  *
  * @author Greg
  */
-public class MaterialDefinition {
+public class Material {
 	public final String name;
 	public final Color color;
 	public final DamageScript damageScript;
     public StatContainer stats;
     
 
-    public MaterialDefinition(String name, Color c, DamageScript script) {
+    public Material(String name, Color c, DamageScript script) {
         this(name, c, new StatContainer(), script);
     }
     
-    public MaterialDefinition(String name, Color c, 
+    public Material(String name, Color c, 
             StatContainer stats, DamageScript script) {
         this.stats = new StatContainer();
         this.stats.addAllStats(stats);

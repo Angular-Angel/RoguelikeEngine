@@ -14,12 +14,12 @@ import roguelikeengine.largeobjects.Attack;
  * @author Greg
  */
 public class ItemDefinition {
-    
-    public final DisplayChar symbol;
+
     public final String[] name;
+    public final DisplayChar symbol;
     public final ArrayList<Attack> attacks;
     public final ArrayList<EquipmentProfile> equipmentSlots;
-    public final MaterialDefinition defmat;
+    public final Material defmat;
     public final ItemUseScript useScript;
     public final StatContainer stats;
     public final ItemDefinition[] components;
@@ -28,12 +28,12 @@ public class ItemDefinition {
         this(d, s, null, new StatContainer(), null);
     }
     
-    public ItemDefinition(DisplayChar d, String[] names, MaterialDefinition mat, 
+    public ItemDefinition(DisplayChar d, String[] names, Material mat, 
             StatContainer stats, ItemUseScript use) {
         this(d, names, mat, stats, use, null);
     }
     
-    public ItemDefinition(DisplayChar d, String[] names, MaterialDefinition mat, 
+    public ItemDefinition(DisplayChar d, String[] names, Material mat, 
             StatContainer stats, ItemUseScript use, ItemDefinition[] components) {
         this.stats = new StatContainer();
         this.stats.addAllStats(stats);
@@ -82,7 +82,7 @@ public class ItemDefinition {
     /**
      * @return the nameMaterial
      */
-    public MaterialDefinition defaultMaterial() {
+    public Material defaultMaterial() {
         return defmat;
     }
 

@@ -1,7 +1,5 @@
 package roguelikeengine.item;
 
-import roguelikeengine.area.AreaLocation;
-import roguelikeengine.area.Location;
 import roguelikeengine.largeobjects.Attack;
 
 /**
@@ -9,9 +7,9 @@ import roguelikeengine.largeobjects.Attack;
  * @author Greg
  */
 public class MaterialItem extends Item {
-    private MaterialDefinition material;
+    private Material material;
     
-    public MaterialItem(MaterialDefinition m, ItemDefinition itemDef) {
+    public MaterialItem(Material m, ItemDefinition itemDef) {
         super(itemDef);
         material = m;
         stats.addAllStats(material.stats.viewStats());
@@ -35,7 +33,7 @@ public class MaterialItem extends Item {
     /**
      * @return the material
      */
-    public MaterialDefinition getMaterial() {
+    public Material getMaterial() {
         return material;
     }
 
@@ -43,24 +41,5 @@ public class MaterialItem extends Item {
     public boolean takeAttack(Attack a){
         material.getDamageScript().run(a, this);
         return (stats.getScore("HP") <= 0);
-    }
-
-    @Override
-    public void destroy() {
-        System.out.println(getName() + " Destroyed!");
-        Location location = getLocation();
-        if (location instanceof AreaLocation) {
-            AreaLocation areaLocation = (AreaLocation) location;
-            areaLocation.getArea().removeItem(this);
-        } else if (location instanceof ItemLocation) {
-            ItemLocation itemLocation = (ItemLocation) location;
-            itemLocation.getContainer().removePart(this);
-        }
-    }
-
-    @Override
-    public boolean containsPart(String s) {
-        if (getName().contains(s)) return true;
-        return false;
     }
 }
