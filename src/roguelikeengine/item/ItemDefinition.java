@@ -22,19 +22,13 @@ public class ItemDefinition {
     public final Material defmat;
     public final ItemUseScript useScript;
     public final StatContainer stats;
-    public final ItemDefinition[] components;
+    public final ArrayList<ConnectionDefinition> connections;
     
     public ItemDefinition(DisplayChar d, String[] s) {
         this(d, s, null, new StatContainer(), null);
     }
-    
     public ItemDefinition(DisplayChar d, String[] names, Material mat, 
             StatContainer stats, ItemUseScript use) {
-        this(d, names, mat, stats, use, null);
-    }
-    
-    public ItemDefinition(DisplayChar d, String[] names, Material mat, 
-            StatContainer stats, ItemUseScript use, ItemDefinition[] components) {
         this.stats = new StatContainer();
         this.stats.addAllStats(stats);
         this.symbol = d;
@@ -42,8 +36,8 @@ public class ItemDefinition {
         defmat = mat;
         attacks = new ArrayList<>();
         equipmentSlots = new ArrayList<>();
+        connections = new ArrayList<>();
         useScript = use;
-        this.components = components;
     }
 
 
@@ -91,5 +85,30 @@ public class ItemDefinition {
      */
     public ItemUseScript getUseScript() {
         return useScript;
+    }
+    
+    public void addConnection(ItemDefinition itemDef, StatContainer stats) {
+    	connections.add(new ConnectionDefinition(itemDef, stats));
+    }
+    
+    public class ConnectionDefinition {
+
+    	public ItemDefinition itemDefinition;
+    	
+    	public StatContainer stats;
+    	
+    	public ConnectionDefinition(ItemDefinition itemDefinition) {
+    		this.itemDefinition = itemDefinition;
+    		this.stats = new StatContainer();
+    	}
+    	
+    	public ConnectionDefinition(ItemDefinition itemDefinition, StatContainer stats) {
+    		this(itemDefinition);
+    		this.stats.addAllStats(stats);
+    	}
+    	
+    	public Connection generateConnection(Item item) {
+    		return new Connection(item, itemDefinition.generateItem(), stats);
+    	}
     }
 }

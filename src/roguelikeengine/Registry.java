@@ -23,6 +23,7 @@ import roguelikeengine.area.TerrainDefinition;
 import roguelikeengine.display.DisplayChar;
 import roguelikeengine.item.DamageScript;
 import roguelikeengine.item.EquipmentProfile;
+import roguelikeengine.item.Item;
 import roguelikeengine.largeobjects.BiologyScript;
 import roguelikeengine.largeobjects.BodyDefinition;
 import roguelikeengine.largeobjects.MeleeAttack;
@@ -81,7 +82,7 @@ public class Registry extends RawReader {
                             readJSONColor(ja));
     }
     
-    private DisplayChar readJSONDisplayChar(JSONArray ja) {
+    public DisplayChar readJSONDisplayChar(JSONArray ja) {
          return new DisplayChar(((String) ja.get(0)).charAt(0), readJSONColor((JSONArray) ja.get(1)));
     }
     
@@ -99,28 +100,29 @@ public class Registry extends RawReader {
         DisplayChar symbol = readJSONDisplayChar(jsonItem);
         Material defmat;
         if (jsonItem.containsKey("defmat"))
-        defmat = materials.get((String) jsonItem.get("defmat"));
+        	defmat = materials.get((String) jsonItem.get("defmat"));
         else defmat = null;
-        
-        ItemDefinition[] components = null;
-        if (jsonItem.containsKey("components")) {
-            JSONArray componentsJSON = (JSONArray) jsonItem.get("components");
-            components = new ItemDefinition[componentsJSON.size()];
-            int i = 0;
-            for (Object o : componentsJSON) {
-                String component = (String) o;
-                components[i] = items.get(component);
-                i++;
-            }
-        }
         
         StatContainer stats = readJSONStats((JSONArray) jsonItem.get("stats"));
         ItemDefinition itemdef;
         if (jsonItem.containsKey("script")) {
             ItemUseScript use = (ItemUseScript) readGroovyScript(new File((String) jsonItem.get("script")));
-            itemdef = new ItemDefinition(symbol, names, defmat, stats, use, components);
+            itemdef = new ItemDefinition(symbol, names, defmat, stats, use);
         } else {
-            itemdef = new ItemDefinition(symbol, names, defmat, stats, null, components);
+            itemdef = new ItemDefinition(symbol, names, defmat, stats, null);
+        }
+        
+        ItemDefinition.ConnectionDefinition[] connections = null;
+        if (jsonItem.containsKey("connections")) {
+            JSONArray connectionsJSON = (JSONArray) jsonItem.get("connections");
+            connections = new ItemDefinition.ConnectionDefinition[connectionsJSON.size()];
+            for (Object o : connectionsJSON) {
+            	JSONObject connectionObj = (JSONObject) o;
+                String itemName = (String) connectionObj.get("item");
+                ItemDefinition component = items.get(itemName);
+                StatContainer connectionStats = readJSONStats((JSONArray) connectionObj.get("stats"));
+                itemdef.addConnection(component, connectionStats);
+            }
         }
         
         JSONArray attacks = (JSONArray) jsonItem.get("attacks");
@@ -242,16 +244,14 @@ public class Registry extends RawReader {
     
     public void readJSONTerrainDefs(File file) {
         JSONParser parser = new JSONParser();
-	try {
-		JSONArray terrainDefs = (JSONArray) parser.parse(new FileReader(file));
-                for (Object e : terrainDefs) {
-                    TerrainDefinition terrain = readJSONTerrainDef((JSONObject) e);
-                    terrainTypes.put(terrain.getName(), terrain);
-                }
- 
-	} catch (IOException | ParseException e) {
-		Logger.getLogger(Registry.class.getName()).log(Level.SEVERE, null, e);
-	} 
+		try {
+			JSONArray terrainDefs = (JSONArray) parser.parse(new FileReader(file));
+	        for (Object e : terrainDefs) {
+	            TerrainDefinition terrain = readJSONTerrainDef((JSONObject) e);
+	            terrainTypes.put(terrain.getName(), terrain);
+	        }
+		} catch (IOException | ParseException e) {
+			Logger.getLogger(Registry.class.getName()).log(Level.SEVERE, null, e);
+		}
     }
-
 }

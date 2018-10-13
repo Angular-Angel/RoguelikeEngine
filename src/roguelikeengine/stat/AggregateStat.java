@@ -6,6 +6,8 @@ package roguelikeengine.stat;
 
 import stat.Stat;
 import java.util.ArrayList;
+
+import roguelikeengine.item.Connection;
 import roguelikeengine.item.Item;
 import stat.StatContainer;
 import stat.StatDescriptor;
@@ -30,22 +32,21 @@ public class AggregateStat extends Stat {
     protected float refactorBase() {
         float newScore = 0;
         int num = 0;
-        ArrayList<Item> parts = item.getParts();
-        if (type == Type.LOWEST) newScore = parts.get(0).stats.getScore(statName);
-        for (Item i : parts) {
+        if (type == Type.LOWEST) newScore = item.connections.get(0).destination.stats.getScore(statName);
+        for (Connection connection : item.connections) {
             switch(type) {
                 case AVERAGE: 
                     num++;
-                case SUM: newScore += i.stats.getScore(statName);
+                case SUM: newScore += connection.destination.stats.getScore(statName);
                     break;
                 case HIGHEST: 
-                    if (newScore < i.stats.getScore(statName)) {
-                        newScore = i.stats.getScore(statName);
+                    if (newScore < connection.destination.stats.getScore(statName)) {
+                        newScore = connection.destination.stats.getScore(statName);
                     }
                     break;
                 case LOWEST:
-                    if (newScore > i.stats.getScore(statName)) {
-                        newScore = i.stats.getScore(statName);
+                    if (newScore > connection.destination.stats.getScore(statName)) {
+                        newScore = connection.destination.stats.getScore(statName);
                     }
                     break;
             }

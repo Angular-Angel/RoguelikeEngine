@@ -11,6 +11,7 @@ import roguelikeengine.display.DisplayChar;
 import roguelikeengine.display.RoguelikeInterface;
 import roguelikeengine.largeobjects.Attack;
 import roguelikeengine.largeobjects.Body;
+import stat.Stat;
 import stat.StatContainer;
 
 /**
@@ -18,11 +19,12 @@ import stat.StatContainer;
  * @author Greg
  */
 public class Item {
-    protected ArrayList<ItemMod> mods;
-    protected ArrayList<Attack> attacks;
-    protected ArrayList<Item> parts;
-    private Location location;
     public DisplayChar symbol;
+    protected ArrayList<Attack> attacks;
+    protected ArrayList<ItemMod> mods;
+    public final ArrayList<Connection> connections; //outgoing connections
+    public final ArrayList<Connection> connectedTo; //incoming connections
+    private Location location;
     public StatContainer stats;
     public final ItemDefinition itemDef;
 
@@ -32,27 +34,30 @@ public class Item {
         this.mods =  new ArrayList<>();
         this.attacks = new ArrayList<>();
         this.symbol = new DisplayChar(itemDef.symbol);
-        parts = new ArrayList<>();
-        if (itemDef.components != null)
-            for (ItemDefinition component : itemDef.components)
-                addPart(component.generateItem());
+        connections = new ArrayList<>();
+        connectedTo = new ArrayList<>();
+        for (ItemDefinition.ConnectionDefinition connectionDefinition : itemDef.connections)
+            addConnection(connectionDefinition.generateConnection(this));
         
         stats.addAllStats(itemDef.stats.viewStats());
         addAttacks(itemDef.getAttacks());
     }
     
-    
-    public void addPart(Item part) {
-        parts.add(part);
-        part.setLocation(new ItemLocation(this));
+    public void addConnection(Connection connection) {
+    	Item item = connection.destination;
+    	connections.add(connection);
+        item.setLocation(new ItemLocation(this));
+        item.connectedTo.add(connection);
     }
     
-    public void removePart(Item part) {
-        parts.remove(part);
+    public void addConnection(Item item, StatContainer statContainer) {
+    	Connection connection = new Connection(this, item);
+    	connection.stats.addAllStats(statContainer);
+    	addConnection(connection);
     }
     
-    public final ArrayList<Item> getParts() {
-        return parts;
+    public void addConnection(Item item, Stat... stats) {
+    	addConnection(item, new StatContainer(stats));
     }
     
     public void addAttack(Attack attack) {
@@ -72,11 +77,9 @@ public class Item {
     
     public  ArrayList<Attack> getAttacks() {
         ArrayList<Attack> attackListing = new ArrayList<>();
-        for (Attack a : attacks) {
-            attackListing.add(a);
-        }
-        for (Item i : parts) {
-            attackListing.addAll(i.getAttacks());
+        attackListing.addAll(attacks);
+        for (Connection connection : connections) {
+            attackListing.addAll(connection.destination.getAttacks());
         }
         return attackListing;
     }
@@ -101,7 +104,7 @@ public class Item {
     }
     
     public void refactor() {
-        for (Item i : parts) i.refactor();
+    	for (Connection connection : connections) connection.destination.refactor();
         stats.refactor();
         /*for (ItemMod i : mods) {
             for (String s : i.viewStats().keySet()) { 
@@ -122,16 +125,18 @@ public class Item {
     public void destroy() {
         if (location instanceof AreaLocation) {
             AreaLocation areaLocation = (AreaLocation) location;
-            for (Item part : parts) {
-                areaLocation.getArea().addEntity(new ItemOnGround(part, areaLocation));
+            for (Connection connection : connections) {
+                areaLocation.getArea().addEntity(new ItemOnGround(connection.destination, areaLocation));
             }
             areaLocation.getArea().removeItem(this);
         } else if (location instanceof ItemLocation) {
             ItemLocation itemLocation = (ItemLocation) location;
-            for (Item part : parts) {
-                itemLocation.getContainer().addPart(part);
+            for (Connection connection : connections) {
+                itemLocation.getContainer().addConnection(connection.destination);
             }
-            itemLocation.getContainer().removePart(this);
+            for (Connection connection : connectedTo) {
+                connection.origin.connections.remove(connection);
+            }
         }
     }
 
@@ -147,14 +152,5 @@ public class Item {
      */
     public void setLocation(Location location) {
         this.location = location;
-    }
-    
-    public boolean containsPart(String s) {
-        if (getName().equals(s)) return true;
-        for (Item i : getParts()) {
-            if (i.containsPart(s))
-                return true;
-        }
-        return false;
     }
 }

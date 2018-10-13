@@ -3,6 +3,7 @@ package roguelikeengine.controller;
 import roguelikeengine.display.Rotation;
 import roguelikeengine.display.DisplayChar;
 import stat.NoSuchStatException;
+import roguelikeengine.item.Connection;
 import roguelikeengine.item.Item;
 import roguelikeengine.item.ItemOnGround;
 import roguelikeengine.area.LocalArea;
@@ -261,15 +262,14 @@ public class Player extends Controller {
     }
     
     public void drawItemDescription(Item item, MenuWindow menu) {
-    	ArrayList<Item> parts = item.getParts();
         int i = 0;
         
-        for (Item part : parts) {
-            if (!part.stats.hasStat("Internal"))
-                menu.addMenuOption(new MenuOption((char)(97 + i++), part.getName()) {
+        for (Connection connection : item.connections) {
+            if (!connection.destination.stats.hasStat("Internal"))
+                menu.addMenuOption(new MenuOption((char)(97 + i++), connection.destination.getName()) {
                     @Override
                     public void select() {
-                        viewBodyPartStatus(part);
+                        viewBodyPartStatus(connection.destination);
                     }
                 });
         }
